@@ -439,3 +439,8 @@ BaaS Bank Application (Aligned with Available APIs)
 - Dashboard includes placeholder sections for Accounts, Payments, and Transactions to be implemented in future steps.
 - Fixed routing issues to ensure seamless navigation after authentication.
 
+## 2025-06-03: Authentication Guard Implementation
+- Added an AuthGuard to protect authenticated routes from unauthorized access.
+- The dashboard route is now secured and only accessible to authenticated users.
+- Unauthenticated users attempting to access protected routes are automatically redirected to the welcome page.
+- Implemented using Angular 17's functional guards with dependency injection for better performance and maintainability.
