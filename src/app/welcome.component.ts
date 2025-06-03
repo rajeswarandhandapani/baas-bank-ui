@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {KEYCLOAK_BASE_URL, KEYCLOAK_CLIENT_ID} from './app.constants';
 
 @Component({
   selector: 'app-welcome',
@@ -9,25 +10,17 @@ import {CommonModule} from '@angular/common';
   styleUrl: './welcome.component.scss'
 })
 export class WelcomeComponent implements OnInit {
+  keycloakBaseUrl = KEYCLOAK_BASE_URL;
+  clientId = KEYCLOAK_CLIENT_ID;
 
-  // Keycloak base URL and realm (update as needed)
-  private keycloakBaseUrl = 'http://localhost:8089/realms/baas';
-  private clientId = 'banking-app';
-
-  constructor() { }
-
-  ngOnInit(): void {
-    // Ensure Bootstrap icons are properly loaded
-    // You might need to add Bootstrap icons to your project if not already installed
-    // npm install bootstrap-icons
-    // And import in your main styles.scss: @import 'bootstrap-icons/font/bootstrap-icons.css';
-  }
+  ngOnInit(): void {}
 
   login() {
-    window.location.href = `${this.keycloakBaseUrl}/protocol/openid-connect/auth?client_id=${this.clientId}&response_type=code&scope=openid&redirect_uri=${encodeURIComponent(window.location.origin)}`;
+    window.location.href = `${this.keycloakBaseUrl}/protocol/openid-connect/auth?client_id=${this.clientId}&response_type=code&scope=openid&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/callback')}`;
   }
 
   register() {
-    window.location.href = `${this.keycloakBaseUrl}/protocol/openid-connect/registrations?client_id=${this.clientId}&response_type=code&scope=openid&redirect_uri=${encodeURIComponent(window.location.origin)}`;
+    // Registration is not allowed; redirect to login instead
+    this.login();
   }
 }
