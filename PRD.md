@@ -513,3 +513,7 @@ BaaS Bank Application (Aligned with Available APIs)
 - Updated Accounts component to use the shared pipe with a cleaner template syntax.
 - Implemented a scalable pattern for future data formatting needs across the application.
 
+## 2025-06-03: Proxy Configuration Update
+- Updated Angular proxy configuration to route all requests matching `/api/**` to the backend API gateway at `http://localhost:8080`.
+- Ensures all frontend API calls to `/api/` endpoints are seamlessly proxied to the backend during development.
+- Simplifies API integration and enables consistent local development experience.
