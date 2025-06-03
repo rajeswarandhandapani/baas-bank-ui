@@ -1,20 +1,94 @@
-<div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light">
-  <div class="card shadow-lg p-4 border-0" style="max-width: 480px; width: 100%;">
-    <div class="text-center mb-4">
-      <img src="assets/baas-bank.png" alt="BaaS Bank Logo" style="height: 250px;" class="mb-3">
-      <h1 class="h3 mb-2 fw-bold text-primary">Welcome to BaaS Bank</h1>
-      <p class="text-secondary mb-0">Modern Banking as a Service Platform</p>
+<div class="welcome-container">
+  <!-- Hero Section -->
+  <section class="hero-section py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Logo now on the left -->
+        <div class="col-lg-5 mb-4 mb-lg-0 text-center text-lg-start">
+          <img src="assets/baas-bank.png" alt="BaaS Bank Logo" class="img-fluid hero-image">
+        </div>
+        <div class="col-lg-7">
+          <h1 class="display-4 fw-bold text-primary mb-3">Welcome to BaaS Bank</h1>
+          <p class="lead text-secondary mb-4">Experience the future of banking with our comprehensive Banking as a Service platform.</p>
+          <div class="d-grid gap-2 d-md-flex">
+            <a class="btn btn-primary btn-lg px-4 me-md-2" href="#" id="login-btn">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Login
+            </a>
+            <a class="btn btn-outline-primary btn-lg px-4" href="#" id="register-btn">
+              <i class="bi bi-person-plus me-2"></i>Register
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-    <ul class="list-unstyled mb-4">
-      <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Secure online banking for customers</li>
-      <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Admin dashboard for bank staff</li>
-      <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Fast payments & transaction history</li>
-    </ul>
-    <div class="d-grid gap-2">
-      <a class="btn btn-primary btn-lg" href="#" id="login-btn">Login</a>
-      <a class="btn btn-outline-primary" href="#" id="register-btn">Register</a>
-    </div>
-  </div>
-  <footer class="mt-4 text-muted small">&copy; 2025 BaaS Bank. All rights reserved.</footer>
-</div>
+  </section>
 
+  <!-- Features Section -->
+  <section class="features-section py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5">Why Choose BaaS Bank</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="feature-icon bg-primary text-white rounded-circle mb-3">
+                <i class="bi bi-shield-lock"></i>
+              </div>
+              <h3 class="h5 card-title">Secure Banking</h3>
+              <p class="card-text">State-of-the-art security protocols to keep your financial data safe and protected.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="feature-icon bg-primary text-white rounded-circle mb-3">
+                <i class="bi bi-graph-up"></i>
+              </div>
+              <h3 class="h5 card-title">Smart Management</h3>
+              <p class="card-text">Comprehensive dashboard for both customers and administrators to manage finances efficiently.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="feature-icon bg-primary text-white rounded-circle mb-3">
+                <i class="bi bi-lightning-charge"></i>
+              </div>
+              <h3 class="h5 card-title">Fast Transactions</h3>
+              <p class="card-text">Quick payments and real-time transaction monitoring for a seamless banking experience.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section py-5 bg-primary text-white">
+    <div class="container text-center">
+      <h2 class="mb-3">Ready to experience modern banking?</h2>
+      <p class="mb-4">Join thousands of satisfied customers already using our platform</p>
+      <a href="#" class="btn btn-light btn-lg px-4" id="get-started-btn">Get Started Now</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-4 bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <p class="mb-0">&copy; 2025 BaaS Bank. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <ul class="list-inline mb-0">
+            <li class="list-inline-item"><a href="#" class="text-white">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">Terms of Service</a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
