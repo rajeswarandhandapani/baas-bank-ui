@@ -31,6 +31,17 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
 - **Communication**: RESTful APIs (Real-time notifications not available)
 - **Security**: JWT Bearer Tokens
 
+## General UI/UX Guidelines
+- Use Angular 17 with standalone components and Bootstrap 5.3.6 for all UI.
+- Ensure all navigation and protected routes are guarded and role-based.
+- All API integration must use the available endpoints as documented in the PRD.
+- Do not implement features not supported by the backend API.
+- Always do the changes step by step by breaking requirement into smaller.
+- Implementing baas-bank UI step by step. remember only one small step at a time allowing me to review, commit and provide feedback.
+- On each step, update prd for current changes
+- Avoid custom CSS classes. Utilize Bootstrap's default classes and utilities as much as possible. If custom styling is absolutely necessary for a specific component that cannot be achieved with Bootstrap, ensure those styles are minimal and scoped to the component.
+- no need to create empty scss files for components that do not require custom styles.
+
 ## User Roles & Permissions
 
 ### 1. Account Holder (Customer)
@@ -459,3 +470,19 @@ BaaS Bank Application (Aligned with Available APIs)
 - Moved the NavbarComponent to `shared/components/navbar/` for better maintainability.
 - Updated component imports and dependencies to reflect the new structure.
 - Set up a scalable folder organization that supports future growth of the application.
+
+## 2025-06-03: CSS Optimization
+- Removed empty SCSS files from all components (Accounts, Payments, Transactions, Dashboard) to reduce unnecessary files.
+- Updated component definitions to remove the `styleUrl` property, as no component-specific styling is needed.
+- Strictly adhering to the Bootstrap-first approach outlined in copilot-instructions.md.
+- Streamlined the codebase by eliminating unused files and dependencies.
+- Enhanced maintainability by ensuring all styling comes from Bootstrap utilities or global styles only.
+- All features remain functionally identical but with a more optimized file structure.
+
+## 2025-06-03: Dashboard Navigation Enhancement
+- Updated dashboard component with proper router navigation to child components.
+- Replaced placeholder links with Angular's routerLink directives for seamless in-app navigation.
+- Connected "View Accounts", "Make a Payment", and "View Transactions" buttons to their respective routes.
+- Added RouterModule import to the DashboardComponent to support navigation directives.
+- Ensured navigation maintains authentication state across all protected routes.
+- Improved user experience by providing direct access to core banking features from the dashboard.

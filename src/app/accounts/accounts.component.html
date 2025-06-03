@@ -1,0 +1,45 @@
+<app-navbar></app-navbar>
+
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1>My Accounts</h1>
+      <p class="lead">View and manage your accounts</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body p-0">
+          <div class="alert alert-info m-3" role="alert">
+            <i class="bi bi-info-circle me-2"></i>
+            Account information will be displayed here once connected to the backend API.
+          </div>
+
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Account Number</th>
+                <th>Type</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5" class="text-center py-4">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="mt-2 text-muted">Loading accounts...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
