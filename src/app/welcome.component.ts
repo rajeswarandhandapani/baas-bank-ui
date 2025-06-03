@@ -20,7 +20,8 @@ export class WelcomeComponent implements OnInit {
   }
 
   register() {
-    // Registration is not allowed; redirect to login instead
+    // Set registration flow flag and redirect to login
+    localStorage.setItem('registration_flow', 'true');
     this.login();
   }
 }

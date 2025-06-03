@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from './auth.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-auth-callback',
@@ -13,24 +14,40 @@ import {AuthService} from './auth.service';
   </div>`
 })
 export class AuthCallbackComponent implements OnInit {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
-    console.log('AuthCallbackComponent initialized');
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
+    const isRegistration = localStorage.getItem('registration_flow') === 'true';
     if (code) {
       this.auth.exchangeCodeForToken(code).subscribe({
         next: (res: any) => {
           this.auth.storeTokens(res);
-          // Redirect to dashboard after successful login
-          this.router.navigate(['/dashboard']);
+          if (isRegistration) {
+            // Registration flow: call POST /api/users
+            this.http.post('/api/users', {}).subscribe({
+              next: () => {
+                localStorage.removeItem('registration_flow');
+                this.router.navigate(['/dashboard']);
+              },
+              error: () => {
+                localStorage.removeItem('registration_flow');
+                this.router.navigate(['/']);
+              }
+            });
+          } else {
+            // Login flow: go to dashboard
+            this.router.navigate(['/dashboard']);
+          }
         },
         error: () => {
+          localStorage.removeItem('registration_flow');
           this.router.navigate(['/']);
         }
       });
     } else {
+      localStorage.removeItem('registration_flow');
       this.router.navigate(['/']);
     }
   }

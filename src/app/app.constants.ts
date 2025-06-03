@@ -4,4 +4,4 @@ export const KEYCLOAK_CLIENT_ID = 'banking-app';
 export const KEYCLOAK_TOKEN_ENDPOINT = `${KEYCLOAK_BASE_URL}/protocol/openid-connect/token`;
 
 // API Configuration
-export const API_BASE_URL = 'http://localhost:8080/api';
+export const API_BASE_URL = '/api';
