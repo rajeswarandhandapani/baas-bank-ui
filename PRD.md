@@ -444,3 +444,18 @@ BaaS Bank Application (Aligned with Available APIs)
 - The dashboard route is now secured and only accessible to authenticated users.
 - Unauthenticated users attempting to access protected routes are automatically redirected to the welcome page.
 - Implemented using Angular 17's functional guards with dependency injection for better performance and maintainability.
+
+## 2025-06-03: Navigation & Layout Implementation
+- Added a shared NavbarComponent providing consistent navigation across the authenticated application.
+- The navbar includes links to Dashboard, Accounts, Payments, and Transactions sections.
+- Implemented a logout button that securely terminates the user session.
+- Integrated with the dashboard view for a cohesive authenticated user experience.
+- Used Bootstrap's responsive navbar component for mobile-friendly navigation.
+- Maintains brand consistency with the BaaS Bank logo in the navigation.
+
+## 2025-06-03: Component Structure Reorganization
+- Improved the application architecture by organizing shared components into a dedicated folder structure.
+- Created a `shared/components` directory following Angular best practices.
+- Moved the NavbarComponent to `shared/components/navbar/` for better maintainability.
+- Updated component imports and dependencies to reflect the new structure.
+- Set up a scalable folder organization that supports future growth of the application.

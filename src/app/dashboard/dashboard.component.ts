@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {NavbarComponent} from '../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NavbarComponent],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit(): void {
-    // Dashboard initialization logic will be added here
+    console.log('Dashboard component initialized');
   }
 }
