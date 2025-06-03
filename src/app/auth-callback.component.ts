@@ -23,7 +23,7 @@ export class AuthCallbackComponent implements OnInit {
       this.auth.exchangeCodeForToken(code).subscribe({
         next: (res: any) => {
           this.auth.storeTokens(res);
-          // TODO: Fetch user profile and redirect based on role
+          // Redirect to dashboard after successful login
           this.router.navigate(['/dashboard']);
         },
         error: () => {
