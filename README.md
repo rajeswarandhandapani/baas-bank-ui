@@ -1,4 +1,21 @@
-# BaasBankUi
+# BaaS Bank Frontend
+
+This project implements the frontend for the Banking as a Service (BaaS) platform using Angular 17 and Bootstrap 5.3.6.
+
+## Setup Instructions
+
+### Prerequisites
+- Node.js (v18+)- npm (v9+)
+- Angular CLI (v17)
+
+### Installation
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+```
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
 
