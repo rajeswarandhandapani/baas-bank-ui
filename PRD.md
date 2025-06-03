@@ -423,5 +423,11 @@ BaaS Bank Application (Aligned with Available APIs)
 - Shared hover effect classes (.baas-card-hover, .baas-btn-hover) moved to styles.scss for global reuse.
 - Welcome Page and all components now use only Bootstrap and shared/global custom classes, with no component-specific CSS.
 - Fully compliant with copilot-instructions.md: avoid custom CSS classes unless absolutely necessary, and use Bootstrap utilities as much as possible.
-````
-</copilot-edited-file>
+
+## 2025-06-03: Authentication Flow & Keycloak Integration Update
+- All Keycloak configuration values (base URL, client ID, token endpoint) are now centralized in `app.constants.ts` for maintainability and consistency.
+- The Welcome Page uses these constants for login and register redirection, ensuring all authentication flows are handled via Keycloak as required.
+- The Register button now redirects to the login page, since self-registration is disabled in Keycloak (registrationAllowed: false).
+- The Angular app is configured to handle the Keycloak login redirect at `/auth/callback`, where the authorization code is exchanged for tokens and securely stored.
+- All login and registration flows are fully compliant with the copilot-instructions.md: no custom forms, only Keycloak-managed authentication.
+- No errors in WelcomeComponent; all authentication logic is now consistent and maintainable.
