@@ -12,9 +12,17 @@
     <div class="col-12">
       <div class="card shadow-sm">
         <div class="card-body p-0">
-          <div class="alert alert-info m-3" role="alert">
+          <!-- Error message -->
+          <div *ngIf="error" class="alert alert-danger m-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Unable to load your accounts. Please try again later.
+            <button (click)="loadAccounts()" class="btn btn-sm btn-outline-danger ms-3">Try Again</button>
+          </div>
+
+          <!-- No accounts message -->
+          <div *ngIf="!loading && !error && accounts.length === 0" class="alert alert-info m-3" role="alert">
             <i class="bi bi-info-circle me-2"></i>
-            Account information will be displayed here once connected to the backend API.
+            You don't have any accounts yet.
           </div>
 
           <table class="table table-hover mb-0">
@@ -28,12 +36,30 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <!-- Loading state -->
+              <tr *ngIf="loading">
                 <td colspan="5" class="text-center py-4">
                   <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
                   </div>
                   <p class="mt-2 text-muted">Loading accounts...</p>
+                </td>
+              </tr>
+
+              <!-- Account data -->
+              <tr *ngFor="let account of accounts">
+                <td>{{account.accountNumber}}</td>
+                <td>{{account.accountType}}</td>
+                <td>{{account.balance | currencyFormat:account.currency}}</td>
+                <td>
+                  <span class="badge" [ngClass]="{
+                    'bg-success': account.status === 'ACTIVE',
+                    'bg-warning': account.status === 'PENDING',
+                    'bg-danger': account.status === 'FROZEN' || account.status === 'CLOSED'
+                  }">{{account.status}}</span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary me-1">View Details</button>
                 </td>
               </tr>
             </tbody>
@@ -43,3 +69,4 @@
     </div>
   </div>
 </div>
+

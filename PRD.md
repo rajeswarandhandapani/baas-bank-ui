@@ -496,3 +496,20 @@ BaaS Bank Application (Aligned with Available APIs)
 - Set up proper error handling for authentication failures with automatic redirection to login.
 - Organized services and interceptors in dedicated folders following best practices.
 
+## 2025-06-03: Accounts Component Implementation
+- Completed the Accounts component with full integration to the backend API via AccountService.
+- Implemented robust state handling for loading, error, and empty account scenarios.
+- Added real-time account data display with proper formatting for currencies and account types.
+- Visual status indicators using color-coded badges to show account states (active, pending, frozen).
+- Created a clean, responsive table layout following banking UI best practices.
+- Implemented refresh functionality allowing users to retry if account loading fails.
+- Set foundation for account details view with action buttons for future enhancement.
+
+## 2025-06-03: Shared Pipes Implementation
+- Created a dedicated CurrencyFormatPipe in the shared folder for currency formatting across the application.
+- Removed component-specific formatting methods in favor of reusable pipes following Angular best practices.
+- Improved separation of concerns by moving formatting logic out of components into dedicated pipes.
+- Enhanced maintainability with centralized formatting logic that can be reused across all components.
+- Updated Accounts component to use the shared pipe with a cleaner template syntax.
+- Implemented a scalable pattern for future data formatting needs across the application.
+
