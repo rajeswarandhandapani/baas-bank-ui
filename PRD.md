@@ -34,7 +34,7 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
 ## User Roles & Permissions
 
 ### 1. Account Holder (Customer)
-**Primary Users**: Individual banking customers
+**Primary Users**: Individual banking customers  
 **Key Capabilities**:
 - Account management and balance inquiry
 - Fund transfers and payments
@@ -43,7 +43,7 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
 - Notifications and alerts
 
 ### 2. BaaS Admin (Bank Administrator)
-**Primary Users**: Bank administrators and support staff
+**Primary Users**: Bank administrators and support staff  
 **Key Capabilities**:
 - All customer operations (view-only or administrative)
 - User management and account oversight
@@ -68,7 +68,7 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
 - ✅ `GET /api/accounts/my-accounts` - Get user's own accounts
 
 #### Payment Service (/api/payments)
-- ✅ `POST /api/payments` - Create new payment (Payment Processing Saga)
+- ✅ `POST /api/payments` - Create new payment (Payment Processing Saga)  
   **Payload Structure:**
   ```json
   {
@@ -88,12 +88,10 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
 #### Audit Service (/api/audit-logs)
 - ✅ `GET /api/audit-logs` - Get audit logs (BAAS_ADMIN only)
 
-
 ### Important API Changes Identified:
 1. **User Registration**: Now uses `POST /api/users` instead of saga endpoint
 2. **My Transactions**: New endpoint `GET /api/transactions/my-transactions` available
 3. **All Transactions**: `GET /api/transactions` for admin access
-
 
 ### Phase 1: Authentication & User Management (Priority: High)
 
@@ -420,8 +418,10 @@ BaaS Bank Application (Aligned with Available APIs)
 - No custom registration or login forms will be implemented in the Angular frontend.
 - User creation, password management, and authentication are managed by Keycloak only.
 
-## 2025-06-03: Welcome Page UI Implemented
-- Implemented a professional Welcome Page as the default landing page.
-- Welcome Page includes BaaS Bank branding, feature highlights, and prominent Login/Register buttons (links not yet functional).
-- Responsive layout using Bootstrap 5.3.6.
-- No authentication logic or Keycloak integration yet—UI only.
+## 2025-06-03: Welcome Page CSS Refactor
+- All custom styles removed from WelcomeComponent; now relies entirely on Bootstrap classes and shared styles in styles.scss.
+- Shared hover effect classes (.baas-card-hover, .baas-btn-hover) moved to styles.scss for global reuse.
+- Welcome Page and all components now use only Bootstrap and shared/global custom classes, with no component-specific CSS.
+- Fully compliant with copilot-instructions.md: avoid custom CSS classes unless absolutely necessary, and use Bootstrap utilities as much as possible.
+````
+</copilot-edited-file>
