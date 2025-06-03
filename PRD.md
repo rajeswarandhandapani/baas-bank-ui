@@ -419,3 +419,9 @@ BaaS Bank Application (Aligned with Available APIs)
 - The application will redirect users to the Keycloak login and registration pages for authentication and onboarding.
 - No custom registration or login forms will be implemented in the Angular frontend.
 - User creation, password management, and authentication are managed by Keycloak only.
+
+## 2025-06-03: Welcome Page UI Implemented
+- Implemented a professional Welcome Page as the default landing page.
+- Welcome Page includes BaaS Bank branding, feature highlights, and prominent Login/Register buttons (links not yet functional).
+- Responsive layout using Bootstrap 5.3.6.
+- No authentication logic or Keycloak integration yet—UI only.
