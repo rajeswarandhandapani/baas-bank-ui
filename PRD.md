@@ -486,3 +486,13 @@ BaaS Bank Application (Aligned with Available APIs)
 - Added RouterModule import to the DashboardComponent to support navigation directives.
 - Ensured navigation maintains authentication state across all protected routes.
 - Improved user experience by providing direct access to core banking features from the dashboard.
+
+## 2025-06-03: API Services Implementation
+- Implemented core API services for backend integration following Angular best practices.
+- Created AccountService with strongly-typed interfaces and methods for account data retrieval.
+- Added TokenInterceptor for centralized authentication token management across all API calls.
+- Configured the application to use interceptors with Angular 17's functional interceptor pattern.
+- Removed redundant authentication logic from individual services to follow DRY principles.
+- Set up proper error handling for authentication failures with automatic redirection to login.
+- Organized services and interceptors in dedicated folders following best practices.
+
