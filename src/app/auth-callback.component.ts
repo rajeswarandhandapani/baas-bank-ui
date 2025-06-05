@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from './auth.service';
 import {HttpClient} from '@angular/common/http';
+import {UserService} from './shared/services/user.service';
 
 @Component({
   selector: 'app-auth-callback',
@@ -14,12 +15,25 @@ import {HttpClient} from '@angular/common/http';
   </div>`
 })
 export class AuthCallbackComponent implements OnInit {
-  constructor(private auth: AuthService, private router: Router, private http: HttpClient) {}
+  constructor(
+    private auth: AuthService, 
+    private router: Router, 
+    private http: HttpClient,
+    private userService: UserService
+  ) {}
+  private redirectToAppropriateHome() {
+    if (this.userService.isAdmin()) {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   ngOnInit(): void {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
     const isRegistration = localStorage.getItem('registration_flow') === 'true';
+    
     if (code) {
       this.auth.exchangeCodeForToken(code).subscribe({
         next: (res: any) => {
@@ -29,7 +43,7 @@ export class AuthCallbackComponent implements OnInit {
             this.http.post('/api/users', {}).subscribe({
               next: () => {
                 localStorage.removeItem('registration_flow');
-                this.router.navigate(['/dashboard']);
+                this.redirectToAppropriateHome();
               },
               error: () => {
                 localStorage.removeItem('registration_flow');
@@ -37,8 +51,8 @@ export class AuthCallbackComponent implements OnInit {
               }
             });
           } else {
-            // Login flow: go to dashboard
-            this.router.navigate(['/dashboard']);
+            // Login flow: go to appropriate home page
+            this.redirectToAppropriateHome();
           }
         },
         error: () => {

@@ -5,7 +5,9 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {AccountsComponent} from './accounts/accounts.component';
 import {PaymentsComponent} from './payments/payments.component';
 import {TransactionsComponent} from './transactions/transactions.component';
-import {authGuard, guestGuard} from './auth.guard';
+import {AdminComponent} from './admin/admin.component';
+import {authGuard, guestGuard, userGuard} from './auth.guard';
+import {adminGuard} from './admin.guard';
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent, canActivate: [guestGuard] },
@@ -13,22 +15,26 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard]
+    canActivate: [userGuard]
   },
   {
     path: 'accounts',
     component: AccountsComponent,
-    canActivate: [authGuard]
+    canActivate: [userGuard]
   },
   {
     path: 'payments',
     component: PaymentsComponent,
-    canActivate: [authGuard]
-  },
-  {
+    canActivate: [userGuard]
+  },  {
     path: 'transactions',
     component: TransactionsComponent,
-    canActivate: [authGuard]
+    canActivate: [userGuard]
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [adminGuard]
   },
   // Wildcard route for handling undefined routes
   { path: '**', redirectTo: '' }

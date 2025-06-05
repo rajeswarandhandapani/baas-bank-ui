@@ -1,0 +1,346 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid py-4">
+  <!-- Admin Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="h3 mb-0">
+        <i class="bi bi-shield-check text-primary me-2"></i>
+        Admin Dashboard
+      </h1>
+      <p class="text-muted mb-0">System overview and administrative controls</p>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-people-fill text-primary fs-1 mb-2"></i>
+          <h5 class="card-title">Total Users</h5>
+          <h3 class="text-primary mb-0">{{ stats.totalUsers }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-bank text-success fs-1 mb-2"></i>
+          <h5 class="card-title">Total Accounts</h5>
+          <h3 class="text-success mb-0">{{ stats.totalAccounts }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-credit-card text-info fs-1 mb-2"></i>
+          <h5 class="card-title">Total Payments</h5>
+          <h3 class="text-info mb-0">{{ stats.totalPayments }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-arrow-left-right text-warning fs-1 mb-2"></i>
+          <h5 class="card-title">Total Transactions</h5>
+          <h3 class="text-warning mb-0">{{ stats.totalTransactions }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Accounts Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-bank me-2"></i>All Accounts
+            </h5>
+            <button 
+              class="btn btn-sm btn-outline-primary"
+              (click)="retryLoad('accounts')"
+              [disabled]="loading.accounts">
+              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Loading State -->
+          <div *ngIf="loading.accounts" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading accounts...</span>
+            </div>
+            <p class="text-muted mt-2 mb-0">Loading accounts...</p>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="errors.accounts && !loading.accounts" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Failed to load accounts. 
+            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('accounts')">Try again</button>
+          </div>
+
+          <!-- Accounts Table -->
+          <div *ngIf="!loading.accounts && !errors.accounts" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Account Number</th>
+                  <th>Type</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let account of accounts">
+                  <td class="fw-medium">{{ account.accountNumber }}</td>
+                  <td>{{ account.accountType }}</td>
+                  <td>{{ account.balance | currencyFormat:account.currency }}</td>
+                  <td>
+                    <span [class]="getAccountStatusClass(account.status)">
+                      {{ account.status }}
+                    </span>
+                  </td>
+                  <td class="text-muted">{{ account.createdAt | date:'short' }}</td>
+                </tr>
+                <tr *ngIf="accounts.length === 0">
+                  <td colspan="5" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    No accounts found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Payments Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-credit-card me-2"></i>All Payments
+            </h5>
+            <button 
+              class="btn btn-sm btn-outline-primary"
+              (click)="retryLoad('payments')"
+              [disabled]="loading.payments">
+              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Loading State -->
+          <div *ngIf="loading.payments" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading payments...</span>
+            </div>
+            <p class="text-muted mt-2 mb-0">Loading payments...</p>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="errors.payments && !loading.payments" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Failed to load payments. 
+            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('payments')">Try again</button>
+          </div>
+
+          <!-- Payments Table -->
+          <div *ngIf="!loading.payments && !errors.payments" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>From Account</th>
+                  <th>To Account</th>
+                  <th>Amount</th>
+                  <th>Reference</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let payment of payments">
+                  <td class="fw-medium">{{ payment.sourceAccountNumber }}</td>
+                  <td class="fw-medium">{{ payment.destinationAccountNumber }}</td>
+                  <td>{{ payment.amount | currencyFormat }}</td>
+                  <td class="text-muted">{{ payment.reference || '-' }}</td>
+                  <td>
+                    <span [class]="getPaymentStatusClass(payment.status || 'PENDING')">
+                      {{ payment.status || 'PENDING' }}
+                    </span>
+                  </td>
+                  <td class="text-muted">{{ payment.createdAt | date:'short' }}</td>
+                </tr>
+                <tr *ngIf="payments.length === 0">
+                  <td colspan="6" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    No payments found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Transactions Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-arrow-left-right me-2"></i>All Transactions
+            </h5>
+            <button 
+              class="btn btn-sm btn-outline-primary"
+              (click)="retryLoad('transactions')"
+              [disabled]="loading.transactions">
+              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Loading State -->
+          <div *ngIf="loading.transactions" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading transactions...</span>
+            </div>
+            <p class="text-muted mt-2 mb-0">Loading transactions...</p>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="errors.transactions && !loading.transactions" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Failed to load transactions. 
+            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('transactions')">Try again</button>
+          </div>
+
+          <!-- Transactions Table -->
+          <div *ngIf="!loading.transactions && !errors.transactions" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Description</th>
+                  <th>Balance</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let transaction of transactions">
+                  <td class="fw-medium">{{ transaction.accountNumber }}</td>
+                  <td [class]="getTransactionTypeClass(transaction.type)">
+                    <i class="bi bi-arrow-down-circle me-1" *ngIf="transaction.type === 'CREDIT'"></i>
+                    <i class="bi bi-arrow-up-circle me-1" *ngIf="transaction.type === 'DEBIT'"></i>
+                    {{ transaction.type }}
+                  </td>
+                  <td [class]="getTransactionTypeClass(transaction.type)">
+                    {{ transaction.amount | currencyFormat }}
+                  </td>
+                  <td class="text-muted">{{ transaction.description }}</td>
+                  <td>{{ (transaction.balance || 0) | currencyFormat }}</td>
+                  <td class="text-muted">{{ transaction.timestamp | date:'short' }}</td>
+                </tr>
+                <tr *ngIf="transactions.length === 0">
+                  <td colspan="6" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    No transactions found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audit Logs Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-file-text me-2"></i>Audit Logs
+            </h5>
+            <button 
+              class="btn btn-sm btn-outline-primary"
+              (click)="retryLoad('audits')"
+              [disabled]="loading.audits">
+              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Loading State -->
+          <div *ngIf="loading.audits" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading audit logs...</span>
+            </div>
+            <p class="text-muted mt-2 mb-0">Loading audit logs...</p>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="errors.audits && !loading.audits" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Failed to load audit logs. 
+            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('audits')">Try again</button>
+          </div>
+
+          <!-- Audit Logs Table -->
+          <div *ngIf="!loading.audits && !errors.audits" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Timestamp</th>
+                  <th>User</th>
+                  <th>Action</th>
+                  <th>Resource</th>
+                  <th>Status</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let log of auditLogs">
+                  <td class="text-muted">{{ log.timestamp | date:'short' }}</td>
+                  <td class="fw-medium">{{ log.userId }}</td>
+                  <td>{{ log.action }}</td>
+                  <td>{{ log.resource }}</td>
+                  <td>
+                    <span [class]="getAuditStatusClass(log.status)">
+                      {{ log.status }}
+                    </span>
+                  </td>
+                  <td class="text-muted">{{ log.details || '-' }}</td>
+                </tr>
+                <tr *ngIf="auditLogs.length === 0">
+                  <td colspan="6" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    No audit logs found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

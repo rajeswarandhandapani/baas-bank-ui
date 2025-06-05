@@ -540,3 +540,73 @@ BaaS Bank Application (Aligned with Available APIs)
 - Integrated CurrencyFormatPipe for consistent currency display across transaction amounts and balances.
 - All transaction functionality now fully compliant with Phase 4 requirements in the PRD.
 - Transaction component follows Bootstrap-first approach with no custom CSS, maintaining design consistency.
+
+## 2025-06-04: Phase 5 Administrative Features Implementation - COMPLETED ✅
+- **Admin Authentication & Authorization**: Implemented comprehensive role-based access control for BAAS_ADMIN users.
+- **UserService**: Created with JWT token parsing to extract user roles and admin status checking via `isAdmin()` method.
+- **AuditService**: Implemented for audit logs API integration using `GET /api/audit-logs` endpoint.
+- **AdminGuardService**: Created specialized guard that checks both authentication and BAAS_ADMIN role before allowing access to admin routes.
+- **Admin Dashboard Component**: Comprehensive implementation with:
+  - Statistics cards showing counts for accounts, payments, transactions, and audit logs
+  - Data tables for all accounts (`GET /api/accounts`), all payments (`GET /api/payments`), all transactions (`GET /api/transactions`), and audit logs (`GET /api/audit-logs`)
+  - Loading states, error handling, and refresh functionality for all data sections
+  - Responsive Bootstrap design with proper data formatting and status indicators
+- **Admin Route Protection**: Added `/admin` route with adminGuard protection in app.routes.ts
+- **Navbar Enhancement**: Updated navbar to show Admin link with shield icon for users with BAAS_ADMIN role
+- **Error Resolution**: Fixed TypeScript compilation errors related to data model field names (createdAt vs timestamp, optional balance handling)
+- **Build Verification**: Successfully built application with no errors, only minor bundle size warnings
+- **Development Server**: Application running successfully on http://localhost:4200/ with all admin features accessible
+
+**Admin Dashboard Features**:
+- **System Overview**: Real-time statistics cards showing total counts
+- **Account Management**: View all user accounts with account details, balance, and status
+- **Payment Monitoring**: Monitor all payments across the system with source/destination tracking
+- **Transaction Oversight**: View all transactions with type indicators and balance tracking  
+- **Audit Trail Access**: Complete audit log viewer for system activity monitoring
+- **Role-Based UI**: Admin navigation link only visible to BAAS_ADMIN users
+- **Responsive Design**: Full mobile and desktop compatibility following Bootstrap patterns
+
+**Technical Implementation**:
+- All admin services follow the established service pattern with proper error handling
+- Admin components use the same state management patterns as user components (loading, error, data states)
+- Proper TypeScript typing for all admin data models
+- Integration with existing CurrencyFormatPipe for consistent formatting
+- Bootstrap-first styling approach maintained throughout admin interface
+- No custom CSS required - all styling uses Bootstrap utility classes
+
+**Phase 5 Status**: ✅ COMPLETED - All administrative features successfully implemented and tested
+**Next Phase**: Phase 4 Polish & Testing (UI/UX improvements, responsive design, comprehensive testing)
+
+## 2025-06-04: Role-Based Navigation Enhancement - COMPLETED ✅
+- **Navbar Role Separation**: Enhanced navbar to display different navigation menus based on user roles:
+  - **Admin Users (BAAS_ADMIN)**: Only see "Admin Dashboard" navigation link
+  - **Regular Users**: See standard navigation (Dashboard, Accounts, Payments, Transactions)
+  - **Conditional Display**: Navigation items conditionally rendered using `*ngIf="isAdmin()"` and `*ngIf="!isAdmin()"`
+- **Enhanced Auth Guard**: Extended AuthGuardService with `allowAdmin` parameter to control admin access:
+  - **userGuard**: New guard that redirects admin users away from regular user routes to admin dashboard
+  - **Route Protection**: Regular user routes now use `userGuard` instead of `authGuard`
+  - **Admin Redirection**: Admin users attempting to access regular routes are automatically redirected to `/admin`
+- **Smart Auth Callback**: Updated AuthCallbackComponent to redirect users to appropriate home page based on role:
+  - **Admin Users**: Redirected to `/admin` after login/registration
+  - **Regular Users**: Redirected to `/dashboard` after login/registration
+  - **Role Detection**: Uses UserService.isAdmin() method for role-based routing decisions
+- **Route Configuration**: Updated app.routes.ts to use role-specific guards:
+  - **Regular User Routes**: dashboard, accounts, payments, transactions use `userGuard`
+  - **Admin Routes**: /admin continues to use `adminGuard`
+  - **Guest Routes**: Welcome page uses `guestGuard` with role-aware redirection
+
+**Technical Implementation Details**:
+- **Enhanced Guard Service**: AuthGuardService now accepts `allowAdmin` parameter for fine-grained access control
+- **Clean Navigation UI**: Admin users see only relevant admin navigation, improving UX and reducing confusion
+- **Security Enhancement**: Prevents admin users from accidentally accessing or being confused by regular user interfaces
+- **Consistent Role-Based Flow**: From login through navigation, user experience is tailored to their role
+- **Bootstrap Integration**: Navigation changes maintain consistent Bootstrap styling and responsive behavior
+
+**User Experience Improvements**:
+- **Admin-First Interface**: Admin users get dedicated admin-focused navigation immediately upon login
+- **Role Clarity**: Clear visual separation between admin and regular user interfaces
+- **Streamlined Workflow**: Each user type sees only relevant navigation options for their role
+- **Automatic Routing**: Smart redirection prevents users from accessing inappropriate sections
+
+**Status**: ✅ COMPLETED - Role-based navigation fully implemented and tested
+**Application Running**: Successfully serving on http://localhost:4200/ with role-based navigation active
