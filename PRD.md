@@ -276,9 +276,10 @@ BaaS Bank Application (Aligned with Available APIs)
 **Deliverables**:
 - ✅ Angular 17 project with Bootstrap 5.3.6
 - ✅ Keycloak OAuth 2.0 authentication service
-- ✅ JWT token management and guards
+- ✅ JWT token management and unified auth guards (refactored for both auth/guest scenarios)
 - ✅ Basic layout and navigation structure
 - ✅ Login/logout functionality
+- ✅ Automatic redirect for authenticated users visiting root/welcome page
 
 ### Phase 2: Core Banking Features (Weeks 3-4) ✅ ACHIEVABLE  
 - **Week 3**: User registration (POST /api/users), profile view, account listing

@@ -19,11 +19,14 @@ export class AuthService {
       .set('redirect_uri', window.location.origin + '/auth/callback');
     return this.http.post(this.tokenEndpoint, body);
   }
-
   storeTokens(tokenResponse: any) {
     localStorage.setItem('access_token', tokenResponse.access_token);
     localStorage.setItem('refresh_token', tokenResponse.refresh_token);
     // Optionally store id_token, expires_in, etc.
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('access_token');
   }
 
   logout() {

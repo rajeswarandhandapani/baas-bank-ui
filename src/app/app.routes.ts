@@ -5,10 +5,10 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {AccountsComponent} from './accounts/accounts.component';
 import {PaymentsComponent} from './payments/payments.component';
 import {TransactionsComponent} from './transactions/transactions.component';
-import {authGuard} from './auth.guard';
+import {authGuard, guestGuard} from './auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: WelcomeComponent },
+  { path: '', component: WelcomeComponent, canActivate: [guestGuard] },
   { path: 'auth/callback', component: AuthCallbackComponent },
   {
     path: 'dashboard',
