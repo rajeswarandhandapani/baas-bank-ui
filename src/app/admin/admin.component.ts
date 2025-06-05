@@ -206,7 +206,6 @@ export class AdminComponent implements OnInit {
         return 'badge bg-secondary';
     }
   }
-
   getTransactionTypeClass(type: string): string {
     switch (type?.toUpperCase()) {
       case 'CREDIT':
@@ -217,19 +216,6 @@ export class AdminComponent implements OnInit {
         return 'text-danger';
       default:
         return 'text-muted';
-    }
-  }
-
-  getAuditStatusClass(status: string): string {
-    switch (status?.toUpperCase()) {
-      case 'SUCCESS':
-        return 'badge bg-success';
-      case 'FAILED':
-        return 'badge bg-danger';
-      case 'WARNING':
-        return 'badge bg-warning';
-      default:
-        return 'badge bg-secondary';
     }
   }
 }

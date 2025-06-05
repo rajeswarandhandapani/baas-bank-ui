@@ -610,3 +610,33 @@ BaaS Bank Application (Aligned with Available APIs)
 
 **Status**: ✅ COMPLETED - Role-based navigation fully implemented and tested
 **Application Running**: Successfully serving on http://localhost:4200/ with role-based navigation active
+
+## 2025-06-04: Audit Log Display Update - COMPLETED ✅
+- **Updated Audit Log Interface**: Modified AuditLog interface to match API response structure with specific fields:
+  - **Required Fields**: id, username, timestamp, eventType
+  - **Optional Fields**: details, correlationId, serviceName
+  - **Removed Legacy Fields**: userId, action, resource, status, ipAddress, userAgent
+- **Enhanced Admin Dashboard Table**: Updated audit log table to display only specified fields:
+  - **ID**: Primary identifier for each audit log entry
+  - **Username**: User who performed the action
+  - **Timestamp**: When the event occurred (formatted with Angular date pipe)
+  - **Event Type**: Type of event with primary badge styling
+  - **Service Name**: Source service that generated the log
+  - **Correlation ID**: Request correlation identifier for tracking
+  - **Details**: Additional event details and context
+- **Improved Table Layout**: 
+  - **Responsive Design**: 7-column table with proper responsive behavior
+  - **Visual Hierarchy**: ID and username emphasized, correlation ID in smaller text
+  - **Badge Styling**: Event type displayed with Bootstrap primary badge
+  - **Empty States**: Proper handling when no audit logs are available
+- **Code Cleanup**: Removed unused `getAuditStatusClass` method from admin component
+
+**Technical Implementation**:
+- Updated `shared/services/audit.service.ts` with new AuditLog interface
+- Modified `admin/admin.component.html` audit log table structure
+- Removed deprecated audit status styling method from admin component
+- Maintained existing loading states and error handling
+- No breaking changes to existing admin functionality
+
+**Status**: ✅ COMPLETED - Audit log display updated to show only specified fields
+**Application Status**: Successfully building and running on http://localhost:4200/

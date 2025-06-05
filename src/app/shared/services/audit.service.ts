@@ -3,15 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface AuditLog {
-  id?: string;
+  id: string;
+  username: string;
   timestamp: string;
-  userId: string;
-  action: string;
-  resource: string;
   details?: string;
-  ipAddress?: string;
-  userAgent?: string;
-  status: string;
+  correlationId?: string;
+  serviceName?: string;
+  eventType: string;
 }
 
 @Injectable({

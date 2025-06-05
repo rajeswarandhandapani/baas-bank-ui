@@ -302,36 +302,34 @@
             <i class="bi bi-exclamation-triangle me-2"></i>
             Failed to load audit logs. 
             <button class="btn btn-link p-0 ms-1" (click)="retryLoad('audits')">Try again</button>
-          </div>
-
-          <!-- Audit Logs Table -->
+          </div>          <!-- Audit Logs Table -->
           <div *ngIf="!loading.audits && !errors.audits" class="table-responsive">
             <table class="table table-hover">
               <thead class="table-light">
                 <tr>
+                  <th>ID</th>
+                  <th>Username</th>
                   <th>Timestamp</th>
-                  <th>User</th>
-                  <th>Action</th>
-                  <th>Resource</th>
-                  <th>Status</th>
+                  <th>Event Type</th>
+                  <th>Service Name</th>
+                  <th>Correlation ID</th>
                   <th>Details</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let log of auditLogs">
+                  <td class="fw-medium">{{ log.id }}</td>
+                  <td>{{ log.username }}</td>
                   <td class="text-muted">{{ log.timestamp | date:'short' }}</td>
-                  <td class="fw-medium">{{ log.userId }}</td>
-                  <td>{{ log.action }}</td>
-                  <td>{{ log.resource }}</td>
                   <td>
-                    <span [class]="getAuditStatusClass(log.status)">
-                      {{ log.status }}
-                    </span>
+                    <span class="badge bg-primary">{{ log.eventType }}</span>
                   </td>
+                  <td class="text-muted">{{ log.serviceName || '-' }}</td>
+                  <td class="text-muted small">{{ log.correlationId || '-' }}</td>
                   <td class="text-muted">{{ log.details || '-' }}</td>
                 </tr>
                 <tr *ngIf="auditLogs.length === 0">
-                  <td colspan="6" class="text-center text-muted py-4">
+                  <td colspan="7" class="text-center text-muted py-4">
                     <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                     No audit logs found
                   </td>
