@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 export interface Transaction {
   id?: string;
   accountNumber: string;
-  transactionType: string;
+  type: string;
   amount: number;
   description: string;
   timestamp?: string;
