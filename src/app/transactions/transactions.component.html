@@ -13,43 +13,67 @@
       <div class="card shadow-sm">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
           <h5 class="card-title mb-0">Transaction History</h5>
-          <div>
-            <button type="button" class="btn btn-outline-secondary btn-sm me-2" disabled>
-              <i class="bi bi-filter me-1"></i>Filter
-            </button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" disabled>
-              <i class="bi bi-download me-1"></i>Export
-            </button>
-          </div>
+          <button 
+            class="btn btn-outline-primary btn-sm" 
+            (click)="retryLoadTransactions()" 
+            *ngIf="error">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Retry
+          </button>
         </div>
-        <div class="card-body p-0">
-          <div class="alert alert-info m-3" role="alert">
-            <i class="bi bi-info-circle me-2"></i>
-            Transaction history will be displayed here once connected to the backend API.
+        <div class="card-body">
+          <!-- Loading State -->
+          <div *ngIf="loading" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading transaction history...</p>
           </div>
 
-          <table class="table table-hover mb-0">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Account</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Balance</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="6" class="text-center py-4">
-                  <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                  <p class="mt-2 text-muted">Loading transactions...</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Error State -->
+          <div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Failed to load transaction history. Please try again.
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="!loading && !error && transactions.length === 0" class="text-center py-4">
+            <i class="bi bi-file-earmark-text text-muted" style="font-size: 3rem;"></i>
+            <h6 class="mt-3 text-muted">No transactions found</h6>
+            <p class="text-muted">Your transaction history will appear here once you have transactions.</p>
+          </div>
+
+          <!-- Transaction Table -->
+          <div *ngIf="!loading && !error && transactions.length > 0" class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let transaction of transactions">
+                  <td>{{ transaction.timestamp | date:'short' }}</td>
+                  <td>{{ transaction.description }}</td>
+                  <td>{{ transaction.accountNumber }}</td>
+                  <td>
+                    <span [class]="getTransactionTypeClass(transaction.transactionType)">
+                      <i [class]="'bi ' + getTransactionIcon(transaction.transactionType) + ' me-1'"></i>
+                      {{ transaction.transactionType }}
+                    </span>
+                  </td>                  <td [class]="getTransactionTypeClass(transaction.transactionType)">
+                    {{ transaction.amount | currencyFormat }}
+                  </td>
+                  <td>{{ (transaction.balance || 0) | currencyFormat }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

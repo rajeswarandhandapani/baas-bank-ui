@@ -517,3 +517,25 @@ BaaS Bank Application (Aligned with Available APIs)
 - Updated Angular proxy configuration to route all requests matching `/api/**` to the backend API gateway at `http://localhost:8080`.
 - Ensures all frontend API calls to `/api/` endpoints are seamlessly proxied to the backend during development.
 - Simplifies API integration and enables consistent local development experience.
+
+## 2025-06-04: Payment Service & Component Implementation
+- Created PaymentService with strongly-typed interfaces for Payment operations following the API specification.
+- Implemented payment creation using `POST /api/payments` endpoint with proper payload structure (sourceAccountNumber, destinationAccountNumber, amount, reference).
+- Added payment history retrieval using `GET /api/payments/my-payments` endpoint for user's own payments.
+- Completed Payments component with reactive forms, form validation, and comprehensive state management.
+- Integrated with AccountService to populate source account dropdown with user's accounts.
+- Added payment form with Bootstrap styling, input validation, loading states, and success/error feedback.
+- Implemented payment history table with proper formatting, status indicators, and empty/error states.
+- All payment functionality now fully compliant with Phase 3 requirements in the PRD.
+- Payment component follows Bootstrap-first approach with no custom CSS, maintaining consistency with design guidelines.
+
+## 2025-06-04: Transaction Service & Component Implementation
+- Created TransactionService with strongly-typed Transaction interface following the API specification.
+- Implemented transaction history retrieval using `GET /api/transactions/my-transactions` endpoint for user's own transactions.
+- Added support for admin access with `GET /api/transactions` endpoint (for future BAAS_ADMIN role implementation).
+- Completed Transactions component with comprehensive state management (loading, error, empty states).
+- Implemented transaction history table with visual indicators for transaction types (credit/debit) using Bootstrap color classes.
+- Added transaction type icons and dynamic styling based on transaction type (credit = green, debit = red).
+- Integrated CurrencyFormatPipe for consistent currency display across transaction amounts and balances.
+- All transaction functionality now fully compliant with Phase 4 requirements in the PRD.
+- Transaction component follows Bootstrap-first approach with no custom CSS, maintaining design consistency.

@@ -8,6 +8,18 @@
     </div>
   </div>
 
+  <!-- Success Message -->
+  <div class="row mb-4" *ngIf="successMessage">
+    <div class="col-12">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>
+        {{ successMessage }}
+        <button type="button" class="btn-close" (click)="successMessage = ''" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Form -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="card shadow-sm">
@@ -15,80 +27,170 @@
           <h5 class="card-title mb-0">Make a Payment</h5>
         </div>
         <div class="card-body">
-          <div class="alert alert-info" role="alert">
-            <i class="bi bi-info-circle me-2"></i>
-            Payment form will be implemented here once connected to the backend API.
-          </div>
+          <form [formGroup]="paymentForm" (ngSubmit)="onSubmitPayment()">
+            <div class="row">
+              <!-- Source Account -->
+              <div class="col-md-6 mb-3">
+                <label for="sourceAccount" class="form-label">From Account</label>
+                <select 
+                  class="form-select" 
+                  id="sourceAccount" 
+                  formControlName="sourceAccountNumber"
+                  [class.is-invalid]="paymentForm.get('sourceAccountNumber')?.invalid && paymentForm.get('sourceAccountNumber')?.touched">
+                  <option value="">Select source account</option>
+                  <option *ngFor="let account of userAccounts" [value]="account.accountNumber">
+                    {{ account.accountNumber }} - {{ account.accountType }} ({{ account.balance | currencyFormat }})
+                  </option>
+                </select>
+                <div class="invalid-feedback" *ngIf="paymentForm.get('sourceAccountNumber')?.invalid && paymentForm.get('sourceAccountNumber')?.touched">
+                  Please select a source account.
+                </div>
+              </div>
 
-          <form>
-            <div class="mb-3">
-              <label for="sourceAccount" class="form-label">From Account</label>
-              <select class="form-select" id="sourceAccount" disabled>
-                <option>Select source account</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="destinationAccount" class="form-label">To Account</label>
-              <input type="text" class="form-control" id="destinationAccount" placeholder="Enter destination account number" disabled>
-            </div>
-
-            <div class="mb-3">
-              <label for="amount" class="form-label">Amount</label>
-              <div class="input-group">
-                <span class="input-group-text">$</span>
-                <input type="number" class="form-control" id="amount" placeholder="Enter amount" disabled>
+              <!-- Destination Account -->
+              <div class="col-md-6 mb-3">
+                <label for="destinationAccount" class="form-label">To Account Number</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="destinationAccount"
+                  formControlName="destinationAccountNumber"
+                  placeholder="Enter destination account number"
+                  [class.is-invalid]="paymentForm.get('destinationAccountNumber')?.invalid && paymentForm.get('destinationAccountNumber')?.touched">
+                <div class="invalid-feedback" *ngIf="paymentForm.get('destinationAccountNumber')?.invalid && paymentForm.get('destinationAccountNumber')?.touched">
+                  Please enter a valid account number (numbers only).
+                </div>
               </div>
             </div>
 
-            <div class="mb-3">
-              <label for="reference" class="form-label">Reference</label>
-              <input type="text" class="form-control" id="reference" placeholder="Enter payment reference" disabled>
+            <div class="row">
+              <!-- Amount -->
+              <div class="col-md-6 mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="amount"
+                    formControlName="amount"
+                    placeholder="0.00"
+                    step="0.01"
+                    min="0.01"
+                    [class.is-invalid]="paymentForm.get('amount')?.invalid && paymentForm.get('amount')?.touched">
+                </div>
+                <div class="invalid-feedback" *ngIf="paymentForm.get('amount')?.invalid && paymentForm.get('amount')?.touched">
+                  Please enter a valid amount (minimum $0.01).
+                </div>
+              </div>
+
+              <!-- Reference -->
+              <div class="col-md-6 mb-3">
+                <label for="reference" class="form-label">Reference</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="reference"
+                  formControlName="reference"
+                  placeholder="Payment reference/description"
+                  maxlength="255"
+                  [class.is-invalid]="paymentForm.get('reference')?.invalid && paymentForm.get('reference')?.touched">
+                <div class="invalid-feedback" *ngIf="paymentForm.get('reference')?.invalid && paymentForm.get('reference')?.touched">
+                  Please enter a payment reference.
+                </div>
+              </div>
             </div>
 
-            <button type="button" class="btn btn-primary" disabled>
-              Make Payment
-            </button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button 
+                type="button" 
+                class="btn btn-outline-secondary me-md-2" 
+                (click)="paymentForm.reset()"
+                [disabled]="loadingForm">
+                Clear
+              </button>
+              <button 
+                type="submit" 
+                class="btn btn-primary" 
+                [disabled]="paymentForm.invalid || loadingForm">
+                <span *ngIf="loadingForm" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                {{ loadingForm ? 'Processing...' : 'Send Payment' }}
+              </button>            </div>
           </form>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Payment History -->
   <div class="row">
     <div class="col-12">
       <div class="card shadow-sm">
-        <div class="card-header bg-light">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
           <h5 class="card-title mb-0">Payment History</h5>
+          <button 
+            class="btn btn-outline-primary btn-sm" 
+            (click)="retryLoadPayments()" 
+            *ngIf="error">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Retry
+          </button>
         </div>
-        <div class="card-body p-0">
-          <div class="alert alert-info m-3" role="alert">
-            <i class="bi bi-info-circle me-2"></i>
-            Payment history will be displayed here once connected to the backend API.
+        <div class="card-body">
+          <!-- Loading State -->
+          <div *ngIf="loadingPayments" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading payment history...</p>
           </div>
 
-          <table class="table table-hover mb-0">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Reference</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="6" class="text-center py-4">
-                  <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                  <p class="mt-2 text-muted">Loading payment history...</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Error State -->
+          <div *ngIf="error && !loadingPayments" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Failed to load payment history. Please try again.
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="!loadingPayments && !error && payments.length === 0" class="text-center py-4">
+            <i class="bi bi-file-earmark-text text-muted" style="font-size: 3rem;"></i>
+            <h6 class="mt-3 text-muted">No payments found</h6>
+            <p class="text-muted">Your payment history will appear here once you make a payment.</p>
+          </div>
+
+          <!-- Payment Table -->
+          <div *ngIf="!loadingPayments && !error && payments.length > 0" class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>From Account</th>
+                  <th>To Account</th>
+                  <th>Amount</th>
+                  <th>Reference</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let payment of payments">
+                  <td>{{ payment.createdAt | date:'short' }}</td>
+                  <td>{{ payment.sourceAccountNumber }}</td>
+                  <td>{{ payment.destinationAccountNumber }}</td>
+                  <td>{{ payment.amount | currencyFormat }}</td>
+                  <td>{{ payment.reference }}</td>
+                  <td>
+                    <span 
+                      class="badge" 
+                      [class.bg-success]="payment.status === 'COMPLETED'" 
+                      [class.bg-warning]="payment.status === 'PENDING'"
+                      [class.bg-danger]="payment.status === 'FAILED'">
+                      {{ payment.status || 'PENDING' }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
