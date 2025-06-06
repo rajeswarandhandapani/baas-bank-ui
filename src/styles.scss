@@ -1,108 +1,157 @@
-// Custom Banking Theme Variables
-:root {
-  --bs-primary: #1e3a5f;
-  --bs-primary-rgb: 30, 58, 95;
-  --bs-secondary: #6c757d;
-  --bs-secondary-rgb: 108, 117, 125;
-  --bs-success: #28a745;
-  --bs-success-rgb: 40, 167, 69;
-  --bs-info: #17a2b8;
-  --bs-info-rgb: 23, 162, 184;
-  --bs-warning: #ffc107;
-  --bs-warning-rgb: 255, 193, 7;
-  --bs-danger: #dc3545;
-  --bs-danger-rgb: 220, 53, 69;
-  --bs-light: #f8f9fa;
-  --bs-light-rgb: 248, 249, 250;
-  --bs-dark: #343a40;
-  --bs-dark-rgb: 52, 58, 64;
-  
-  // Banking specific colors
-  --banking-blue: #1e3a5f;
-  --banking-light-blue: #4a90e2;
-  --banking-gold: #d4af37;
-  --banking-gray: #f5f7fa;
-  --banking-dark-gray: #2c3e50;
-  --banking-gradient: linear-gradient(135deg, #1e3a5f 0%, #4a90e2 100%);
-}
+// Custom Bootstrap Variable Overrides for Banking Theme
+$primary: #1e3a5f;
+$secondary: #6c757d;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #f8f9fa;
+$dark: #343a40;
+
+// Banking specific custom colors
+$banking-blue: #1e3a5f;
+$banking-light-blue: #4a90e2;
+$banking-gold: #d4af37;
+$banking-gray: #f5f7fa;
+$banking-dark-gray: #2c3e50;
+
+// Typography
+$font-family-sans-serif: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+$line-height-base: 1.6;
+
+// Border radius
+$border-radius: 8px;
+$border-radius-sm: 6px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+
+// Shadows
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+$box-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+$box-shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+// Card
+$card-border-width: 0;
+$card-border-radius: $border-radius-lg;
+$card-box-shadow: $box-shadow;
+$card-cap-padding-y: 1.25rem;
+$card-cap-padding-x: 1.5rem;
+
+// Buttons
+$btn-border-radius: $border-radius;
+$btn-padding-y: 0.6rem;
+$btn-padding-x: 1.5rem;
+$btn-font-weight: 500;
+
+// Forms
+$input-border-radius: $border-radius;
+$input-border-width: 2px;
+$input-padding-y: 0.75rem;
+$input-padding-x: 1rem;
+
+// Navbar
+$navbar-padding-y: 1rem;
+$navbar-brand-font-weight: 700;
+$navbar-brand-font-size: 1.5rem;
+
+// Body
+$body-bg: $banking-gray;
+$body-color: $dark;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 @import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
-// Global Banking Theme Styles
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--banking-gray);
-  color: var(--bs-dark);
-  line-height: 1.6;
+// Banking specific gradient and utility classes
+.bg-banking-gradient {
+  background: linear-gradient(135deg, #{$banking-blue} 0%, #{$banking-light-blue} 100%) !important;
 }
 
-// Custom Card Styles
+.text-banking-blue {
+  color: $banking-blue !important;
+}
+
+// Enhanced card hover effects
 .card {
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
   transition: all 0.3s ease;
   
   &:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: $box-shadow-lg;
     transform: translateY(-2px);
   }
 }
 
 .card-header {
-  background: var(--banking-gradient);
+  background: linear-gradient(135deg, #{$banking-blue} 0%, #{$banking-light-blue} 100%);
   color: white;
-  border-radius: 12px 12px 0 0 !important;
-  border: none;
-  padding: 1.25rem 1.5rem;
   font-weight: 600;
 }
 
-// Enhanced Button Styles
+// Enhanced button hover effects
 .btn {
-  border-radius: 8px;
-  padding: 0.6rem 1.5rem;
-  font-weight: 500;
   transition: all 0.3s ease;
   
   &.btn-primary {
-    background: var(--banking-gradient);
+    background: linear-gradient(135deg, #{$banking-blue} 0%, #{$banking-light-blue} 100%);
     border: none;
-    
-    &:hover {
-      background: linear-gradient(135deg, #2c4a6b 0%, #5a9ce8 100%);
+      &:hover {
+      background: linear-gradient(135deg, #{darken($banking-blue, 10%)} 0%, #{darken($banking-light-blue, 5%)} 100%);
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
     }
   }
+}
+
+// Icon circle for feature cards
+.icon-circle {
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(135deg, #{$banking-blue} 0%, #{$banking-light-blue} 100%);
+  transition: all 0.3s ease;
   
-  &.btn-outline-primary {
-    color: var(--banking-blue);
-    border-color: var(--banking-blue);
-    
-    &:hover {
-      background: var(--banking-blue);
-      border-color: var(--banking-blue);
-    }
+  &:hover {
+    transform: scale(1.05);
   }
 }
 
-// Navigation Enhancements
-.navbar {
-  background: var(--banking-gradient) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem 0;
+// Dashboard stat cards
+.dashboard-stat-card {
+  background: white;
+  border-radius: $border-radius-xl;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: $box-shadow;
+  transition: all 0.3s ease;
   
-  .navbar-brand {
-    font-weight: 700;
-    font-size: 1.5rem;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $box-shadow-lg;
   }
+  
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $banking-blue;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-label {
+    color: $secondary;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.875rem;
+  }
+}
+
+// Navigation enhancements
+.navbar {
+  background: linear-gradient(135deg, #{$banking-blue} 0%, #{$banking-light-blue} 100%) !important;
+  box-shadow: $box-shadow-sm;
   
   .nav-link {
     font-weight: 500;
     margin: 0 0.5rem;
-    border-radius: 6px;
+    border-radius: $border-radius-sm;
     transition: all 0.3s ease;
     
     &:hover, &.active {
@@ -112,30 +161,18 @@ body {
   }
 }
 
-// Icon Enhancements
-.icon-circle {
-  width: 4rem;
-  height: 4rem;
-  background: var(--banking-gradient);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-// Table Styling
+// Enhanced table styling
 .table {
   background: white;
-  border-radius: 12px;
+  border-radius: $border-radius-lg;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: $box-shadow-sm;
   
   th {
-    background-color: #f8f9fa;
+    background-color: $light;
     border: none;
     font-weight: 600;
-    color: var(--banking-dark-gray);
+    color: $banking-dark-gray;
     padding: 1rem;
   }
   
@@ -149,117 +186,13 @@ body {
     transition: all 0.2s ease;
     
     &:hover {
-      background-color: #f8f9fa;
+      background-color: $light;
     }
-  }
-}
-
-// Form Enhancements
-.form-control, .form-select {
-  border-radius: 8px;
-  border: 2px solid #e9ecef;
-  padding: 0.75rem 1rem;
-  transition: all 0.3s ease;
-  
-  &:focus {
-    border-color: var(--banking-light-blue);
-    box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
-  }
-}
-
-.form-label {
-  font-weight: 600;
-  color: var(--banking-dark-gray);
-  margin-bottom: 0.5rem;
-}
-
-// Alert Enhancements
-.alert {
-  border: none;
-  border-radius: 12px;
-  padding: 1.25rem 1.5rem;
-  
-  &.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-  }
-  
-  &.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-  }
-  
-  &.alert-info {
-    background-color: #cce7f0;
-    color: #0c5460;
-  }
-}
-
-// Dashboard Specific Styles
-.dashboard-stat-card {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  }
-  
-  .stat-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--banking-blue);
-    margin-bottom: 0.5rem;
-  }
-  
-  .stat-label {
-    color: #6c757d;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 0.875rem;
-  }
-}
-
-// Banking specific utilities
-.text-banking-blue {
-  color: var(--banking-blue) !important;
-}
-
-.bg-banking-gradient {
-  background: var(--banking-gradient) !important;
-}
-
-.border-banking {
-  border-color: var(--banking-light-blue) !important;
-}
-
-// Loading states
-.loading-skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
   }
 }
 
 // Responsive enhancements
 @media (max-width: 768px) {
-  .card {
-    margin-bottom: 1rem;
-  }
-  
   .dashboard-stat-card {
     padding: 1.5rem;
     
