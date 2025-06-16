@@ -6,6 +6,7 @@ import { AccountService, Account } from '../shared/services/account.service';
 import { PaymentService, Payment } from '../shared/services/payment.service';
 import { TransactionService, Transaction } from '../shared/services/transaction.service';
 import { AuditService, AuditLog } from '../shared/services/audit.service';
+import { NotificationService, Notification } from '../shared/services/notification.service';
 import { UserService, User } from '../shared/services/user.service';
 import { CurrencyFormatPipe } from '../shared/pipes/currency-format.pipe';
 
@@ -22,7 +23,8 @@ export class AdminComponent implements OnInit {
     payments: false,
     transactions: false,
     audits: false,
-    users: false
+    users: false,
+    notifications: false
   };
 
   // Error states
@@ -31,7 +33,8 @@ export class AdminComponent implements OnInit {
     payments: false,
     transactions: false,
     audits: false,
-    users: false
+    users: false,
+    notifications: false
   };
 
   // Data
@@ -39,6 +42,7 @@ export class AdminComponent implements OnInit {
   payments: Payment[] = [];
   transactions: Transaction[] = [];
   auditLogs: AuditLog[] = [];
+  notifications: Notification[] = [];
   users: User[] = [];
 
   // Summary stats
@@ -46,7 +50,8 @@ export class AdminComponent implements OnInit {
     totalAccounts: 0,
     totalUsers: 0,
     totalPayments: 0,
-    totalTransactions: 0
+    totalTransactions: 0,
+    totalNotifications: 0
   };
 
   constructor(
@@ -54,6 +59,7 @@ export class AdminComponent implements OnInit {
     private paymentService: PaymentService,
     private transactionService: TransactionService,
     private auditService: AuditService,
+    private notificationService: NotificationService,
     private userService: UserService
   ) {}
 
@@ -66,6 +72,7 @@ export class AdminComponent implements OnInit {
     this.loadPayments();
     this.loadTransactions();
     this.loadAuditLogs();
+    this.loadNotifications();
     this.loadUsers();
   }
 
@@ -140,6 +147,24 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  loadNotifications(): void {
+    this.loading.notifications = true;
+    this.errors.notifications = false;
+
+    this.notificationService.getAllNotifications().subscribe({
+      next: (notifications) => {
+        this.notifications = notifications;
+        this.stats.totalNotifications = notifications.length;
+        this.loading.notifications = false;
+      },
+      error: (err) => {
+        console.error('Error loading notifications:', err);
+        this.errors.notifications = true;
+        this.loading.notifications = false;
+      }
+    });
+  }
+
   loadUsers(): void {
     this.loading.users = true;
     this.errors.users = false;
@@ -171,6 +196,9 @@ export class AdminComponent implements OnInit {
         break;
       case 'audits':
         this.loadAuditLogs();
+        break;
+      case 'notifications':
+        this.loadNotifications();
         break;
       case 'users':
         this.loadUsers();
@@ -216,6 +244,40 @@ export class AdminComponent implements OnInit {
         return 'text-danger';
       default:
         return 'text-muted';
+    }
+  }
+
+  getNotificationStatusClass(status: string): string {
+    switch (status?.toUpperCase()) {
+      case 'SENT':
+      case 'DELIVERED':
+        return 'badge bg-success';
+      case 'PENDING':
+        return 'badge bg-warning';
+      case 'FAILED':
+      case 'ERROR':
+        return 'badge bg-danger';
+      default:
+        return 'badge bg-secondary';
+    }
+  }
+
+  getNotificationTypeClass(type: string): string {
+    switch (type?.toUpperCase()) {
+      case 'PAYMENT_SUCCESS':
+      case 'TRANSFER_SUCCESS':
+        return 'badge bg-success';
+      case 'PAYMENT_FAILED':
+      case 'TRANSFER_FAILED':
+        return 'badge bg-danger';
+      case 'ACCOUNT_CREATED':
+      case 'ACCOUNT_ACTIVATED':
+        return 'badge bg-info';
+      case 'SECURITY_ALERT':
+      case 'FRAUD_ALERT':
+        return 'badge bg-warning';
+      default:
+        return 'badge bg-primary';
     }
   }
 }

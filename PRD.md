@@ -99,6 +99,22 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
 #### Audit Service (/api/audit-logs)
 - ✅ `GET /api/audit-logs` - Get audit logs (BAAS_ADMIN only)
 
+#### Notification Service (/api/notifications)
+- ✅ `GET /api/notifications` - List all notifications (BAAS_ADMIN only)
+  **Response Structure:**
+  ```json
+  [
+    {
+      "id": 1,
+      "userId": "user123",
+      "type": "PAYMENT_SUCCESS",
+      "message": "Payment completed successfully",
+      "status": "SENT",
+      "reference": "PAY-2025-001"
+    }
+  ]
+  ```
+
 ### Important API Changes Identified:
 1. **User Registration**: Now uses `POST /api/users` instead of saga endpoint
 2. **My Transactions**: New endpoint `GET /api/transactions/my-transactions` available
@@ -160,6 +176,7 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
 #### 5.1 Admin Dashboard
 - **All Accounts**: Uses `GET /api/accounts` endpoint
 - **All Payments**: Uses `GET /api/payments` endpoint  
+- **All Notifications**: Uses `GET /api/notifications` endpoint
 - **Audit Logs**: Uses `GET /api/audit-logs` endpoint
 - **Admin Overview**: Basic administrative view of system data
 
@@ -270,6 +287,10 @@ BaaS Bank Application (Aligned with Available APIs)
   - `GET /api/transactions/my-transactions` - User's own transactions
 - **Audit Service**: 
   - `GET /api/audit-logs` - Audit trail access (BAAS_ADMIN only)
+- **Notification Service**:
+  - `GET /api/notifications` - List all notifications (BAAS_ADMIN only)
+- **Notification Service**: 
+  - `GET /api/notifications` - List all notifications (BAAS_ADMIN only)
 
 ## Implementation Phases & Timeline
 
@@ -306,6 +327,7 @@ BaaS Bank Application (Aligned with Available APIs)
 - ✅ Admin dashboard with role-based access
 - ✅ Admin account overview (GET /api/accounts)
 - ✅ Admin payment monitoring (GET /api/payments)
+- ✅ Admin notification management (GET /api/notifications)
 - ✅ Audit log access (GET /api/audit-logs)
 
 ### Phase 4: Polish & Testing (Weeks 7-8) ✅ ACHIEVABLE
@@ -645,3 +667,39 @@ BaaS Bank Application (Aligned with Available APIs)
 
 **Status**: ✅ COMPLETED - Audit log display updated to show only specified fields
 **Application Status**: Successfully building and running on http://localhost:4200/
+
+## 2025-06-15: Notification Service & Admin Dashboard Enhancement - COMPLETED ✅
+- **Notification Service**: Created NotificationService with strongly-typed Notification interface following the API specification.
+- **API Integration**: Implemented `GET /api/notifications` endpoint integration for BAAS_ADMIN users.
+- **Admin Dashboard Enhancement**: Extended admin dashboard with comprehensive notification management:
+  - Added notification statistics card to show total notifications count
+  - Implemented notification data table with proper formatting and status indicators
+  - Added loading states, error handling, and refresh functionality for notifications
+  - Created notification type and status badge styling for better visual hierarchy
+- **Notification Display**: Comprehensive notification table showing:
+  - **ID**: Primary identifier for each notification
+  - **User ID**: Target user for the notification
+  - **Type**: Notification type with color-coded badges (payment success, account alerts, etc.)
+  - **Message**: Notification content/message
+  - **Status**: Delivery status with color-coded badges (sent, pending, failed)
+  - **Reference**: Related transaction or process reference
+- **Enhanced Statistics**: Updated admin dashboard statistics to include 5 cards in responsive layout:
+  - Total Users, Total Accounts, Total Payments, Total Notifications, Total Transactions
+  - Reorganized statistics cards for better visual balance
+- **Technical Implementation**:
+  - Added NotificationService in shared services with proper TypeScript interfaces
+  - Extended AdminComponent to include notification loading, error handling, and display
+  - Added notification-specific styling methods for type and status indicators
+  - Maintained consistent Bootstrap-first styling approach
+  - Integrated with existing admin dashboard patterns for loading states and error handling
+
+**Notification Management Features**:
+- **System Overview**: Real-time notification statistics in admin dashboard
+- **Notification Monitoring**: View all system notifications with detailed information
+- **Status Tracking**: Visual indicators for notification delivery status
+- **Type Classification**: Color-coded notification types for easy identification
+- **User Mapping**: Clear association between notifications and target users
+- **Reference Tracking**: Link notifications to related transactions or processes
+
+**Status**: ✅ COMPLETED - Notification service fully implemented with admin dashboard integration
+**Application Status**: Successfully building and running with notification management features

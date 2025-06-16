@@ -44,6 +44,19 @@
     <div class="col-md-3 mb-3">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body text-center">
+          <i class="bi bi-bell text-secondary fs-1 mb-2"></i>
+          <h5 class="card-title">Total Notifications</h5>
+          <h3 class="text-secondary mb-0">{{ stats.totalNotifications }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Second Row of Statistics Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
           <i class="bi bi-arrow-left-right text-warning fs-1 mb-2"></i>
           <h5 class="card-title">Total Transactions</h5>
           <h3 class="text-warning mb-0">{{ stats.totalTransactions }}</h3>
@@ -261,6 +274,83 @@
                   <td colspan="6" class="text-center text-muted py-4">
                     <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                     No transactions found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Notifications Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-bell me-2"></i>All Notifications
+            </h5>
+            <button 
+              class="btn btn-sm btn-outline-primary"
+              (click)="retryLoad('notifications')"
+              [disabled]="loading.notifications">
+              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Loading State -->
+          <div *ngIf="loading.notifications" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading notifications...</span>
+            </div>
+            <p class="text-muted mt-2 mb-0">Loading notifications...</p>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="errors.notifications && !loading.notifications" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Failed to load notifications. 
+            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('notifications')">Try again</button>
+          </div>
+
+          <!-- Notifications Table -->
+          <div *ngIf="!loading.notifications && !errors.notifications" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>User ID</th>
+                  <th>Type</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                  <th>Reference</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let notification of notifications">
+                  <td class="fw-medium">{{ notification.id }}</td>
+                  <td class="text-muted">{{ notification.userId }}</td>
+                  <td>
+                    <span [class]="getNotificationTypeClass(notification.type)">
+                      {{ notification.type }}
+                    </span>
+                  </td>
+                  <td>{{ notification.message }}</td>
+                  <td>
+                    <span [class]="getNotificationStatusClass(notification.status)">
+                      {{ notification.status }}
+                    </span>
+                  </td>
+                  <td class="text-muted">{{ notification.reference || '-' }}</td>
+                </tr>
+                <tr *ngIf="notifications.length === 0">
+                  <td colspan="6" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    No notifications found
                   </td>
                 </tr>
               </tbody>
