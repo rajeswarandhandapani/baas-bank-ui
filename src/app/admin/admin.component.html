@@ -392,40 +392,58 @@
             <i class="bi bi-exclamation-triangle me-2"></i>
             Failed to load audit logs. 
             <button class="btn btn-link p-0 ms-1" (click)="retryLoad('audits')">Try again</button>
-          </div>          <!-- Audit Logs Table -->
+          </div>          <!-- Audit Logs Table (Grouped by Correlation ID) -->
           <div *ngIf="!loading.audits && !errors.audits" class="table-responsive">
-            <table class="table table-hover">
-              <thead class="table-light">
-                <tr>
-                  <th>ID</th>
-                  <th>Username</th>
-                  <th>Timestamp</th>
-                  <th>Event Type</th>
-                  <th>Service Name</th>
-                  <th>Correlation ID</th>
-                  <th>Details</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let log of auditLogs">
-                  <td class="fw-medium">{{ log.id }}</td>
-                  <td>{{ log.username }}</td>
-                  <td class="text-muted">{{ log.timestamp | date:'short' }}</td>
-                  <td>
-                    <span class="badge bg-primary">{{ log.eventType }}</span>
-                  </td>
-                  <td class="text-muted">{{ log.serviceName || '-' }}</td>
-                  <td class="text-muted small">{{ log.correlationId || '-' }}</td>
-                  <td class="text-muted">{{ log.details || '-' }}</td>
-                </tr>
-                <tr *ngIf="auditLogs.length === 0">
-                  <td colspan="7" class="text-center text-muted py-4">
-                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                    No audit logs found
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <!-- Show message if no audit logs -->
+            <div *ngIf="auditLogs.length === 0" class="text-center text-muted py-4">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              No audit logs found
+            </div>
+
+            <!-- Grouped Audit Logs -->
+            <div *ngIf="auditLogs.length > 0">
+              <div *ngFor="let group of getGroupedAuditLogsEntries(); let i = index" class="mb-4">
+                <!-- Correlation ID Header -->
+                <div class="d-flex align-items-center mb-2">
+                  <h6 class="mb-0 me-2">
+                    <i class="bi bi-link-45deg text-primary me-1"></i>
+                    Correlation ID: 
+                    <code class="text-primary">{{ group[0] === 'no-correlation-id' ? 'No Correlation ID' : group[0] }}</code>
+                  </h6>
+                  <span class="badge bg-secondary ms-2">{{ group[1].length }} log{{ group[1].length !== 1 ? 's' : '' }}</span>
+                </div>
+
+                <!-- Logs for this Correlation ID -->
+                <div class="card border-start border-primary border-3 mb-3">
+                  <div class="card-body p-0">
+                    <table class="table table-sm table-hover mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>ID</th>
+                          <th>Username</th>
+                          <th>Timestamp</th>
+                          <th>Event Type</th>
+                          <th>Service Name</th>
+                          <th>Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let log of group[1]">
+                          <td class="fw-medium">{{ log.id }}</td>
+                          <td>{{ log.username }}</td>
+                          <td class="text-muted">{{ log.timestamp | date:'short' }}</td>
+                          <td>
+                            <span class="badge bg-primary">{{ log.eventType }}</span>
+                          </td>
+                          <td class="text-muted">{{ log.serviceName || '-' }}</td>
+                          <td class="text-muted">{{ log.details || '-' }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

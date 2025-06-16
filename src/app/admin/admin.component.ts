@@ -42,6 +42,7 @@ export class AdminComponent implements OnInit {
   payments: Payment[] = [];
   transactions: Transaction[] = [];
   auditLogs: AuditLog[] = [];
+  groupedAuditLogs: { [correlationId: string]: AuditLog[] } = {};
   notifications: Notification[] = [];
   users: User[] = [];
 
@@ -137,6 +138,7 @@ export class AdminComponent implements OnInit {
     this.auditService.getAuditLogs().subscribe({
       next: (logs) => {
         this.auditLogs = logs;
+        this.groupAuditLogsByCorrelationId(logs);
         this.loading.audits = false;
       },
       error: (err) => {
@@ -204,6 +206,36 @@ export class AdminComponent implements OnInit {
         this.loadUsers();
         break;
     }
+  }
+
+  groupAuditLogsByCorrelationId(logs: AuditLog[]): void {
+    this.groupedAuditLogs = {};
+    
+    logs.forEach(log => {
+      const correlationId = log.correlationId || 'no-correlation-id';
+      
+      if (!this.groupedAuditLogs[correlationId]) {
+        this.groupedAuditLogs[correlationId] = [];
+      }
+      
+      this.groupedAuditLogs[correlationId].push(log);
+    });
+
+    // Sort each group by timestamp (newest first)
+    Object.keys(this.groupedAuditLogs).forEach(correlationId => {
+      this.groupedAuditLogs[correlationId].sort((a, b) => 
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      );
+    });
+  }
+
+  getGroupedAuditLogsEntries(): [string, AuditLog[]][] {
+    return Object.entries(this.groupedAuditLogs).sort((a, b) => {
+      // Sort by the timestamp of the first (newest) log in each group
+      const timestampA = a[1][0]?.timestamp || '';
+      const timestampB = b[1][0]?.timestamp || '';
+      return new Date(timestampB).getTime() - new Date(timestampA).getTime();
+    });
   }
 
   getAccountStatusClass(status: string): string {
