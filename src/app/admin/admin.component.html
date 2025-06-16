@@ -184,7 +184,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let payment of payments">
-                  <td class="text-muted">{{ payment.createdAt | date:'short' }}</td>
+                  <td class="text-muted">{{ payment.timestamp | date:'short' }}</td>
                   <td class="fw-medium">{{ payment.sourceAccountNumber }}</td>
                   <td class="fw-medium">{{ payment.destinationAccountNumber }}</td>
                   <td>{{ payment.amount | currencyFormat }}</td>

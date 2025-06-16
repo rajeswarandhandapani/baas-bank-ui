@@ -173,7 +173,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let payment of payments">
-                  <td>{{ payment.createdAt | date:'short' }}</td>
+                  <td>{{ payment.timestamp | date:'short' }}</td>
                   <td>{{ payment.sourceAccountNumber }}</td>
                   <td>{{ payment.destinationAccountNumber }}</td>
                   <td>{{ payment.amount | currencyFormat }}</td>
@@ -181,7 +181,7 @@
                   <td>
                     <span 
                       class="badge" 
-                      [class.bg-success]="payment.status === 'COMPLETED'" 
+                      [class.bg-success]="payment.status === 'PROCESSED' || payment.status === 'COMPLETED'" 
                       [class.bg-warning]="payment.status === 'PENDING'"
                       [class.bg-danger]="payment.status === 'FAILED'">
                       {{ payment.status || 'PENDING' }}

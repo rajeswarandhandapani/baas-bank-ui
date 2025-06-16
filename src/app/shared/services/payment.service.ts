@@ -9,8 +9,8 @@ export interface Payment {
   amount: number;
   reference: string;
   status?: string;
-  createdAt?: string;
-  completedAt?: string;
+  timestamp?: string;
+  createdBy?: string;
 }
 
 export interface CreatePaymentRequest {
