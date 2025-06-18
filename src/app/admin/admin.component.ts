@@ -281,6 +281,8 @@ export class AdminComponent implements OnInit {
 
   getNotificationStatusClass(status: string): string {
     switch (status?.toUpperCase()) {
+      case 'NEW':
+        return 'badge bg-primary';
       case 'SENT':
       case 'DELIVERED':
         return 'badge bg-success';
@@ -296,20 +298,22 @@ export class AdminComponent implements OnInit {
 
   getNotificationTypeClass(type: string): string {
     switch (type?.toUpperCase()) {
+      case 'ACCOUNT_OPENED':
+      case 'ACCOUNT_CREATED':
+      case 'ACCOUNT_ACTIVATED':
+        return 'badge bg-success';
+      case 'PAYMENT_PROCESSED':
       case 'PAYMENT_SUCCESS':
       case 'TRANSFER_SUCCESS':
         return 'badge bg-success';
       case 'PAYMENT_FAILED':
       case 'TRANSFER_FAILED':
         return 'badge bg-danger';
-      case 'ACCOUNT_CREATED':
-      case 'ACCOUNT_ACTIVATED':
-        return 'badge bg-info';
       case 'SECURITY_ALERT':
       case 'FRAUD_ALERT':
         return 'badge bg-warning';
       default:
-        return 'badge bg-primary';
+        return 'badge bg-info';
     }
   }
 }

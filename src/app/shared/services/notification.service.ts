@@ -4,13 +4,11 @@ import { Observable } from 'rxjs';
 
 export interface Notification {
   id: number;
-  userId: string;
+  userName: string;
   type: string;
   message: string;
   status: string;
   reference: string;
-  createdAt?: string;
-  timestamp?: string;
 }
 
 @Injectable({
