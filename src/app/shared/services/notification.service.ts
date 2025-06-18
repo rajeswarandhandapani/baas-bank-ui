@@ -9,6 +9,7 @@ export interface Notification {
   message: string;
   status: string;
   reference: string;
+  timestamp: string;
 }
 
 @Injectable({
