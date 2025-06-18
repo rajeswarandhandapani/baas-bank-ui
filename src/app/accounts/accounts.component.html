@@ -50,7 +50,7 @@
               <tr *ngFor="let account of accounts">
                 <td>{{account.accountNumber}}</td>
                 <td>{{account.accountType}}</td>
-                <td>{{account.balance | currencyFormat:account.currency}}</td>
+                <td>{{account.balance | currencyFormat}}</td>
                 <td>
                   <span class="badge" [ngClass]="{
                     'bg-success': account.status === 'ACTIVE',

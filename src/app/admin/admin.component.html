@@ -106,16 +106,20 @@
                   <th>Created</th>
                   <th>Account Number</th>
                   <th>Type</th>
+                  <th>User ID</th>
+                  <th>User Name</th>
                   <th>Balance</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let account of accounts">
-                  <td class="text-muted">{{ account.createdAt | date:'short' }}</td>
+                  <td class="text-muted">{{ account.createdTimestamp | date:'short' }}</td>
                   <td class="fw-medium">{{ account.accountNumber }}</td>
                   <td>{{ account.accountType }}</td>
-                  <td>{{ account.balance | currencyFormat:account.currency }}</td>
+                  <td class="text-muted">{{ account.userId }}</td>
+                  <td class="text-muted">{{ account.userName }}</td>
+                  <td>{{ account.balance | currencyFormat }}</td>
                   <td>
                     <span [class]="getAccountStatusClass(account.status)">
                       {{ account.status }}
@@ -123,7 +127,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="accounts.length === 0">
-                  <td colspan="5" class="text-center text-muted py-4">
+                  <td colspan="7" class="text-center text-muted py-4">
                     <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                     No accounts found
                   </td>

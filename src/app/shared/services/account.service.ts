@@ -7,10 +7,11 @@ export interface Account {
   id: string;
   accountNumber: string;
   accountType: string;
+  userId: string;
+  userName: string;
   balance: number;
-  currency: string;
   status: string;
-  createdAt: string;
+  createdTimestamp: string;
 }
 
 @Injectable({
