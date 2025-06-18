@@ -703,3 +703,30 @@ BaaS Bank Application (Aligned with Available APIs)
 
 **Status**: ✅ COMPLETED - Notification service fully implemented with admin dashboard integration
 **Application Status**: Successfully building and running with notification management features
+
+## 2025-06-18: Keycloak Session Logout Enhancement - COMPLETED ✅
+- **Enhanced Logout Functionality**: Updated the AuthService logout method to properly terminate Keycloak SSO sessions in addition to clearing local tokens.
+- **Keycloak Logout Integration**: Added proper Keycloak logout endpoint configuration and integration:
+  - **Logout Endpoint**: Added `KEYCLOAK_LOGOUT_ENDPOINT` constant in app.constants.ts
+  - **Session Termination**: Logout now redirects to Keycloak's logout URL to terminate the SSO session
+  - **Post-Logout Redirect**: Configured `post_logout_redirect_uri` to redirect users back to the welcome page after logout
+  - **Local Token Cleanup**: Ensures local tokens are cleared before redirecting to Keycloak logout
+- **Security Enhancement**: Prevents users from maintaining active Keycloak sessions after logging out of the application:
+  - **Complete Logout**: Users are fully logged out of both the application and Keycloak SSO
+  - **Session Security**: Eliminates security risks from lingering Keycloak sessions
+  - **Proper Flow**: Logout -> Clear local tokens -> Redirect to Keycloak logout -> Return to welcome page
+
+**Technical Implementation**:
+- **Enhanced AuthService**: Updated logout() method to use `window.location.href` for Keycloak logout redirect
+- **Logout URL Construction**: Properly formatted logout URL with client_id and post_logout_redirect_uri parameters
+- **Constants Management**: Added logout endpoint to centralized constants for maintainability
+- **Preserved Router**: Kept Router dependency for potential future use while using direct navigation for logout
+
+**Security Benefits**:
+- **Complete Session Termination**: Ensures no residual sessions remain in Keycloak after logout
+- **Proper SSO Logout**: Follows OAuth 2.0/OpenID Connect best practices for logout flows
+- **Enhanced Security**: Prevents potential security issues from incomplete logout processes
+- **User Experience**: Clear and complete logout experience with proper redirection flow
+
+**Status**: ✅ COMPLETED - Keycloak session logout fully implemented and tested
+**Application Status**: Successfully building and running with enhanced logout security
