@@ -114,32 +114,11 @@
             <h5 class="mb-0">
               <i class="bi bi-bank me-2"></i>All Accounts
             </h5>
-            <button 
-              class="btn btn-sm btn-outline-primary"
-              (click)="retryLoad('accounts')"
-              [disabled]="loading.accounts">
-              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-            </button>
           </div>
         </div>
         <div class="card-body">
-          <!-- Loading State -->
-          <div *ngIf="loading.accounts" class="text-center py-4">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading accounts...</span>
-            </div>
-            <p class="text-muted mt-2 mb-0">Loading accounts...</p>
-          </div>
-
-          <!-- Error State -->
-          <div *ngIf="errors.accounts && !loading.accounts" class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Failed to load accounts. 
-            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('accounts')">Try again</button>
-          </div>
-
           <!-- Accounts Table -->
-          <div *ngIf="!loading.accounts && !errors.accounts" class="table-responsive">
+          <div class="table-responsive">
             <table class="table table-hover">
               <thead class="table-light">
                 <tr>
@@ -189,32 +168,11 @@
             <h5 class="mb-0">
               <i class="bi bi-credit-card me-2"></i>All Payments
             </h5>
-            <button 
-              class="btn btn-sm btn-outline-primary"
-              (click)="retryLoad('payments')"
-              [disabled]="loading.payments">
-              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-            </button>
           </div>
         </div>
         <div class="card-body">
-          <!-- Loading State -->
-          <div *ngIf="loading.payments" class="text-center py-4">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading payments...</span>
-            </div>
-            <p class="text-muted mt-2 mb-0">Loading payments...</p>
-          </div>
-
-          <!-- Error State -->
-          <div *ngIf="errors.payments && !loading.payments" class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Failed to load payments. 
-            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('payments')">Try again</button>
-          </div>
-
           <!-- Payments Table -->
-          <div *ngIf="!loading.payments && !errors.payments" class="table-responsive">
+          <div class="table-responsive">
             <table class="table table-hover">
               <thead class="table-light">
                 <tr>
@@ -262,32 +220,11 @@
             <h5 class="mb-0">
               <i class="bi bi-arrow-left-right me-2"></i>All Transactions
             </h5>
-            <button 
-              class="btn btn-sm btn-outline-primary"
-              (click)="retryLoad('transactions')"
-              [disabled]="loading.transactions">
-              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-            </button>
           </div>
         </div>
         <div class="card-body">
-          <!-- Loading State -->
-          <div *ngIf="loading.transactions" class="text-center py-4">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading transactions...</span>
-            </div>
-            <p class="text-muted mt-2 mb-0">Loading transactions...</p>
-          </div>
-
-          <!-- Error State -->
-          <div *ngIf="errors.transactions && !loading.transactions" class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Failed to load transactions. 
-            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('transactions')">Try again</button>
-          </div>
-
           <!-- Transactions Table -->
-          <div *ngIf="!loading.transactions && !errors.transactions" class="table-responsive">
+          <div class="table-responsive">
             <table class="table table-hover">
               <thead class="table-light">
                 <tr>
@@ -337,32 +274,11 @@
             <h5 class="mb-0">
               <i class="bi bi-bell me-2"></i>All Notifications
             </h5>
-            <button 
-              class="btn btn-sm btn-outline-primary"
-              (click)="retryLoad('notifications')"
-              [disabled]="loading.notifications">
-              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-            </button>
           </div>
         </div>
         <div class="card-body">
-          <!-- Loading State -->
-          <div *ngIf="loading.notifications" class="text-center py-4">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading notifications...</span>
-            </div>
-            <p class="text-muted mt-2 mb-0">Loading notifications...</p>
-          </div>
-
-          <!-- Error State -->
-          <div *ngIf="errors.notifications && !loading.notifications" class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Failed to load notifications. 
-            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('notifications')">Try again</button>
-          </div>
-
           <!-- Notifications Table -->
-          <div *ngIf="!loading.notifications && !errors.notifications" class="table-responsive">
+          <div class="table-responsive">
             <table class="table table-hover">
               <thead class="table-light">
                 <tr>
@@ -416,30 +332,11 @@
             <h5 class="mb-0">
               <i class="bi bi-file-text me-2"></i>Audit Logs
             </h5>
-            <button 
-              class="btn btn-sm btn-outline-primary"
-              (click)="retryLoad('audits')"
-              [disabled]="loading.audits">
-              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-            </button>
           </div>
         </div>
         <div class="card-body">
-          <!-- Loading State -->
-          <div *ngIf="loading.audits" class="text-center py-4">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading audit logs...</span>
-            </div>
-            <p class="text-muted mt-2 mb-0">Loading audit logs...</p>
-          </div>
-
-          <!-- Error State -->
-          <div *ngIf="errors.audits && !loading.audits" class="alert alert-danger" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            Failed to load audit logs. 
-            <button class="btn btn-link p-0 ms-1" (click)="retryLoad('audits')">Try again</button>
-          </div>          <!-- Audit Logs Table (Grouped by Correlation ID) -->
-          <div *ngIf="!loading.audits && !errors.audits" class="table-responsive">
+          <!-- Audit Logs Table (Grouped by Correlation ID) -->
+          <div class="table-responsive">
             <!-- Show message if no audit logs -->
             <div *ngIf="auditLogs.length === 0" class="text-center text-muted py-4">
               <i class="bi bi-inbox fs-1 d-block mb-2"></i>

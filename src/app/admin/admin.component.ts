@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../shared/components/navbar/navbar.component';
-import { AccountService, Account } from '../shared/services/account.service';
-import { PaymentService, Payment } from '../shared/services/payment.service';
-import { TransactionService, Transaction } from '../shared/services/transaction.service';
-import { AuditService, AuditLog } from '../shared/services/audit.service';
-import { NotificationService, Notification } from '../shared/services/notification.service';
-import { UserService, User } from '../shared/services/user.service';
+import { Account } from '../shared/services/account.service';
+import { Payment } from '../shared/services/payment.service';
+import { Transaction } from '../shared/services/transaction.service';
+import { AuditLog } from '../shared/services/audit.service';
+import { Notification } from '../shared/services/notification.service';
+import { User } from '../shared/services/user.service';
 import { AdminDashboardService } from '../shared/services/admin-dashboard.service';
 import { CurrencyFormatPipe } from '../shared/pipes/currency-format.pipe';
 
@@ -18,26 +18,14 @@ import { CurrencyFormatPipe } from '../shared/pipes/currency-format.pipe';
   templateUrl: './admin.component.html'
 })
 export class AdminComponent implements OnInit {
-  // Loading states
+  // Loading state
   loading = {
-    dashboard: false,
-    accounts: false,
-    payments: false,
-    transactions: false,
-    audits: false,
-    users: false,
-    notifications: false
+    dashboard: false
   };
 
-  // Error states
+  // Error state
   errors = {
-    dashboard: false,
-    accounts: false,
-    payments: false,
-    transactions: false,
-    audits: false,
-    users: false,
-    notifications: false
+    dashboard: false
   };
 
   // Data
@@ -59,12 +47,6 @@ export class AdminComponent implements OnInit {
   };
 
   constructor(
-    private accountService: AccountService,
-    private paymentService: PaymentService,
-    private transactionService: TransactionService,
-    private auditService: AuditService,
-    private notificationService: NotificationService,
-    private userService: UserService,
     private adminDashboardService: AdminDashboardService
   ) {}
 
@@ -106,148 +88,11 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  loadAdminData(): void {
-    // Keep the original method for backward compatibility with individual loads
-    this.loadAccounts();
-    this.loadPayments();
-    this.loadTransactions();
-    this.loadAuditLogs();
-    this.loadNotifications();
-    this.loadUsers();
-  }
 
-  loadAccounts(): void {
-    this.loading.accounts = true;
-    this.errors.accounts = false;
-
-    this.accountService.getAllAccounts().subscribe({
-      next: (accounts) => {
-        this.accounts = accounts;
-        this.stats.totalAccounts = accounts.length;
-        this.loading.accounts = false;
-      },
-      error: (err) => {
-        console.error('Error loading accounts:', err);
-        this.errors.accounts = true;
-        this.loading.accounts = false;
-      }
-    });
-  }
-
-  loadPayments(): void {
-    this.loading.payments = true;
-    this.errors.payments = false;
-
-    this.paymentService.getAllPayments().subscribe({
-      next: (payments) => {
-        this.payments = payments;
-        this.stats.totalPayments = payments.length;
-        this.loading.payments = false;
-      },
-      error: (err) => {
-        console.error('Error loading payments:', err);
-        this.errors.payments = true;
-        this.loading.payments = false;
-      }
-    });
-  }
-
-  loadTransactions(): void {
-    this.loading.transactions = true;
-    this.errors.transactions = false;
-
-    this.transactionService.getAllTransactions().subscribe({
-      next: (transactions) => {
-        this.transactions = transactions;
-        this.stats.totalTransactions = transactions.length;
-        this.loading.transactions = false;
-      },
-      error: (err) => {
-        console.error('Error loading transactions:', err);
-        this.errors.transactions = true;
-        this.loading.transactions = false;
-      }
-    });
-  }
-
-  loadAuditLogs(): void {
-    this.loading.audits = true;
-    this.errors.audits = false;
-
-    this.auditService.getAuditLogs().subscribe({
-      next: (logs) => {
-        this.auditLogs = logs;
-        this.groupAuditLogsByCorrelationId(logs);
-        this.loading.audits = false;
-      },
-      error: (err) => {
-        console.error('Error loading audit logs:', err);
-        this.errors.audits = true;
-        this.loading.audits = false;
-      }
-    });
-  }
-
-  loadNotifications(): void {
-    this.loading.notifications = true;
-    this.errors.notifications = false;
-
-    this.notificationService.getAllNotifications().subscribe({
-      next: (notifications) => {
-        this.notifications = notifications;
-        this.stats.totalNotifications = notifications.length;
-        this.loading.notifications = false;
-      },
-      error: (err) => {
-        console.error('Error loading notifications:', err);
-        this.errors.notifications = true;
-        this.loading.notifications = false;
-      }
-    });
-  }
-
-  loadUsers(): void {
-    this.loading.users = true;
-    this.errors.users = false;
-
-    this.userService.getAllUsers().subscribe({
-      next: (users) => {
-        this.users = users;
-        this.stats.totalUsers = users.length;
-        this.loading.users = false;
-      },
-      error: (err) => {
-        console.error('Error loading users:', err);
-        this.errors.users = true;
-        this.loading.users = false;
-      }
-    });
-  }
 
   retryLoad(section: string): void {
-    switch (section) {
-      case 'dashboard':
-        this.loadAdminDashboard();
-        break;
-      case 'accounts':
-        this.loadAccounts();
-        break;
-      case 'payments':
-        this.loadPayments();
-        break;
-      case 'transactions':
-        this.loadTransactions();
-        break;
-      case 'audits':
-        this.loadAuditLogs();
-        break;
-      case 'notifications':
-        this.loadNotifications();
-        break;
-      case 'users':
-        this.loadUsers();
-        break;
-    }
+    // Only support dashboard-level refresh - no individual section loading
+    this.loadAdminDashboard();
   }
 
   groupAuditLogsByCorrelationId(logs: AuditLog[]): void {
