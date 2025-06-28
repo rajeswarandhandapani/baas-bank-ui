@@ -115,6 +115,21 @@ BaaS Bank is a modern, responsive web application that provides a complete banki
   ]
   ```
 
+#### Admin Dashboard Composition (/api/admin-dashboard)
+- ✅ `GET /api/admin-dashboard` - Get all admin dashboard data in single call (BAAS_ADMIN only)
+  **Response Structure:**
+  ```json
+  {
+    "transactions": [],
+    "notifications": [],
+    "accounts": [],
+    "auditLogs": [],
+    "users": [],
+    "payments": []
+  }
+  ```
+  **Benefits**: Reduces 6 separate API calls to 1, improving performance and consistency
+
 ### Important API Changes Identified:
 1. **User Registration**: Now uses `POST /api/users` instead of saga endpoint
 2. **My Transactions**: New endpoint `GET /api/transactions/my-transactions` available
@@ -456,6 +471,43 @@ BaaS Bank Application (Aligned with Available APIs)
 - The application will redirect users to the Keycloak login and registration pages for authentication and onboarding.
 - No custom registration or login forms will be implemented in the Angular frontend.
 - User creation, password management, and authentication are managed by Keycloak only.
+
+## 2025-06-28: Admin Dashboard API Composition Implementation - COMPLETED ✅
+
+**Major Enhancement**: Implemented API composition pattern for admin dashboard to optimize performance and reduce multiple API calls.
+
+**Key Changes**:
+- **New AdminDashboardService**: Created dedicated service for the `/api/admin-dashboard` endpoint that returns all admin data in a single call
+- **API Composition Pattern**: Backend now provides aggregated data including:
+  - All accounts with user information
+  - All payments 
+  - All transactions
+  - All audit logs
+  - All notifications 
+  - All users
+- **Enhanced Admin Component**: Updated `AdminComponent` to use the new composition API:
+  - Added `loadAdminDashboard()` method that makes single API call instead of 6 separate calls
+  - Improved loading states with global dashboard loading indicator
+  - Enhanced error handling with dashboard-level retry functionality
+  - Maintained backward compatibility with individual API methods
+- **UI Improvements**: 
+  - Added global "Refresh All Data" button for better user experience
+  - Implemented dashboard-level loading and error states
+  - All sections now conditionally render based on dashboard loading state
+  - Improved error messaging and retry options
+
+**Technical Benefits**:
+- **Performance**: Reduced from 6 API calls to 1 call on dashboard load
+- **Network Efficiency**: Significantly reduced bandwidth usage and latency
+- **Consistency**: All admin data loaded together ensures data consistency
+- **User Experience**: Faster dashboard loading with unified loading states
+- **Maintainability**: Centralized error handling and loading logic
+
+**Backward Compatibility**: Individual API methods remain available for section-specific refresh operations when needed.
+
+**Status**: ✅ COMPLETED - Admin dashboard now uses efficient API composition pattern with improved performance and user experience.
+
+---
 
 ## 2025-06-03: Welcome Page CSS Refactor
 - All custom styles removed from WelcomeComponent; now relies entirely on Bootstrap classes and shared styles in styles.scss.

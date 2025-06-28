@@ -1,0 +1,9 @@
+- Use Angular 17 with standalone components and Bootstrap 5.3.6 for all UI.
+- Ensure all navigation and protected routes are guarded and role-based.
+- All API integration must use the available endpoints as documented in the PRD.
+- Do not implement features not supported by the backend API.
+- Always do the changes step by step by breaking requirement into smaller.
+- Implementing baas-bank UI step by step. remember only one small step at a time allowing me to review, commit and provide feedback.
+- On each step, update prd for current changes
+- Avoid custom CSS classes. Utilize Bootstrap's default classes and utilities as much as possible. If custom styling is absolutely necessary for a specific component that cannot be achieved with Bootstrap, ensure those styles are minimal and scoped to the component.
+- no need to create empty scss files for components that do not require custom styles.

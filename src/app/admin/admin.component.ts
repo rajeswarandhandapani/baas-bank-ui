@@ -8,6 +8,7 @@ import { TransactionService, Transaction } from '../shared/services/transaction.
 import { AuditService, AuditLog } from '../shared/services/audit.service';
 import { NotificationService, Notification } from '../shared/services/notification.service';
 import { UserService, User } from '../shared/services/user.service';
+import { AdminDashboardService } from '../shared/services/admin-dashboard.service';
 import { CurrencyFormatPipe } from '../shared/pipes/currency-format.pipe';
 
 @Component({
@@ -19,6 +20,7 @@ import { CurrencyFormatPipe } from '../shared/pipes/currency-format.pipe';
 export class AdminComponent implements OnInit {
   // Loading states
   loading = {
+    dashboard: false,
     accounts: false,
     payments: false,
     transactions: false,
@@ -29,6 +31,7 @@ export class AdminComponent implements OnInit {
 
   // Error states
   errors = {
+    dashboard: false,
     accounts: false,
     payments: false,
     transactions: false,
@@ -61,14 +64,50 @@ export class AdminComponent implements OnInit {
     private transactionService: TransactionService,
     private auditService: AuditService,
     private notificationService: NotificationService,
-    private userService: UserService
+    private userService: UserService,
+    private adminDashboardService: AdminDashboardService
   ) {}
 
   ngOnInit(): void {
-    this.loadAdminData();
+    this.loadAdminDashboard();
+  }
+
+  loadAdminDashboard(): void {
+    this.loading.dashboard = true;
+    this.errors.dashboard = false;
+
+    this.adminDashboardService.getAdminDashboard().subscribe({
+      next: (data) => {
+        // Populate all data from the composition API
+        this.accounts = data.accounts || [];
+        this.payments = data.payments || [];
+        this.transactions = data.transactions || [];
+        this.auditLogs = data.auditLogs || [];
+        this.notifications = data.notifications || [];
+        this.users = data.users || [];
+
+        // Update statistics
+        this.stats.totalAccounts = this.accounts.length;
+        this.stats.totalPayments = this.payments.length;
+        this.stats.totalTransactions = this.transactions.length;
+        this.stats.totalNotifications = this.notifications.length;
+        this.stats.totalUsers = this.users.length;
+
+        // Group audit logs by correlation ID
+        this.groupAuditLogsByCorrelationId(this.auditLogs);
+
+        this.loading.dashboard = false;
+      },
+      error: (err) => {
+        console.error('Error loading admin dashboard:', err);
+        this.errors.dashboard = true;
+        this.loading.dashboard = false;
+      }
+    });
   }
 
   loadAdminData(): void {
+    // Keep the original method for backward compatibility with individual loads
     this.loadAccounts();
     this.loadPayments();
     this.loadTransactions();
@@ -187,6 +226,9 @@ export class AdminComponent implements OnInit {
 
   retryLoad(section: string): void {
     switch (section) {
+      case 'dashboard':
+        this.loadAdminDashboard();
+        break;
       case 'accounts':
         this.loadAccounts();
         break;
