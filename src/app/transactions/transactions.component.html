@@ -61,11 +61,15 @@
                   <td>{{ transaction.timestamp | date:'short' }}</td>
                   <td>{{ transaction.description }}</td>
                   <td>{{ transaction.accountNumber }}</td>
-                  <td>                    <span [class]="getTransactionTypeClass(transaction.type)">
-                      <i [class]="'bi ' + getTransactionIcon(transaction.type) + ' me-1'"></i>
+                  <td>
+                    <span [class]="transaction.type | transactionTypeClass">
+                      <i class="bi bi-arrow-down-circle me-1" *ngIf="transaction.type === 'CREDIT' || transaction.type === 'DEPOSIT'"></i>
+                      <i class="bi bi-arrow-up-circle me-1" *ngIf="transaction.type === 'DEBIT' || transaction.type === 'WITHDRAWAL'"></i>
+                      <i class="bi bi-arrow-left-right me-1" *ngIf="transaction.type !== 'CREDIT' && transaction.type !== 'DEPOSIT' && transaction.type !== 'DEBIT' && transaction.type !== 'WITHDRAWAL'"></i>
                       {{ transaction.type }}
                     </span>
-                  </td>                  <td [class]="getTransactionTypeClass(transaction.type)">
+                  </td>
+                  <td [class]="transaction.type | transactionTypeClass">
                     {{ transaction.amount | currencyFormat }}
                   </td>
                   <td>{{ (transaction.balance || 0) | currencyFormat }}</td>

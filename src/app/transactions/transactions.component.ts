@@ -3,11 +3,12 @@ import {CommonModule} from '@angular/common';
 import {NavbarComponent} from '../shared/components/navbar/navbar.component';
 import {TransactionService, Transaction} from '../shared/services/transaction.service';
 import {CurrencyFormatPipe} from '../shared/pipes/currency-format.pipe';
+import {TransactionTypeClassPipe} from '../shared/pipes/transaction-type-class.pipe';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, CurrencyFormatPipe],
+  imports: [CommonModule, NavbarComponent, CurrencyFormatPipe, TransactionTypeClassPipe],
   templateUrl: './transactions.component.html'
 })
 export class TransactionsComponent implements OnInit {
@@ -40,31 +41,5 @@ export class TransactionsComponent implements OnInit {
 
   retryLoadTransactions(): void {
     this.loadTransactions();
-  }
-
-  getTransactionTypeClass(type: string): string {
-    switch (type?.toUpperCase()) {
-      case 'CREDIT':
-      case 'DEPOSIT':
-        return 'text-success';
-      case 'DEBIT':
-      case 'WITHDRAWAL':
-        return 'text-danger';
-      default:
-        return 'text-muted';
-    }
-  }
-
-  getTransactionIcon(type: string): string {
-    switch (type?.toUpperCase()) {
-      case 'CREDIT':
-      case 'DEPOSIT':
-        return 'bi-arrow-down-circle';
-      case 'DEBIT':
-      case 'WITHDRAWAL':
-        return 'bi-arrow-up-circle';
-      default:
-        return 'bi-arrow-left-right';
-    }
   }
 }

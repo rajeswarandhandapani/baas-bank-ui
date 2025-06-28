@@ -5,11 +5,12 @@ import {NavbarComponent} from '../shared/components/navbar/navbar.component';
 import {PaymentService, Payment, CreatePaymentRequest} from '../shared/services/payment.service';
 import {AccountService, Account} from '../shared/services/account.service';
 import {CurrencyFormatPipe} from '../shared/pipes/currency-format.pipe';
+import {StatusBadgePipe} from '../shared/pipes/status-badge.pipe';
 
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, CurrencyFormatPipe],
+  imports: [CommonModule, ReactiveFormsModule, NavbarComponent, CurrencyFormatPipe, StatusBadgePipe],
   templateUrl: './payments.component.html'
 })
 export class PaymentsComponent implements OnInit {

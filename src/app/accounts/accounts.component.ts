@@ -3,11 +3,12 @@ import {CommonModule} from '@angular/common';
 import {NavbarComponent} from '../shared/components/navbar/navbar.component';
 import {Account, AccountService} from '../shared/services/account.service';
 import {CurrencyFormatPipe} from '../shared/pipes/currency-format.pipe';
+import {StatusBadgePipe} from '../shared/pipes/status-badge.pipe';
 
 @Component({
   selector: 'app-accounts',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, CurrencyFormatPipe],
+  imports: [CommonModule, NavbarComponent, CurrencyFormatPipe, StatusBadgePipe],
   templateUrl: './accounts.component.html'
 })
 export class AccountsComponent implements OnInit {

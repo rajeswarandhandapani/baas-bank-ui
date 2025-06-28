@@ -788,3 +788,60 @@ BaaS Bank Application (Aligned with Available APIs)
 
 **Status**: ✅ COMPLETED - Keycloak session logout fully implemented and tested
 **Application Status**: Successfully building and running with enhanced logout security
+
+## 2025-06-28: Reusable Status/Class Pipes Implementation - COMPLETED ✅
+
+**Enhancement**: Completed the implementation of reusable Angular pipes to replace all inline status/class logic across the application, ensuring consistency and maintainability.
+
+**Reusable Pipes Created/Updated**:
+- **StatusBadgePipe**: Handles account, payment, and notification status badge classes
+  - Supports account statuses: ACTIVE (success), PENDING (warning), FROZEN/SUSPENDED (danger)
+  - Supports payment statuses: SUCCESS/COMPLETED (success), PENDING (warning), FAILED/REJECTED (danger)
+  - Supports notification statuses: NEW (primary), SENT/DELIVERED (success), PENDING (warning), FAILED/ERROR (danger)
+- **TransactionTypeClassPipe**: Handles transaction type text color classes
+  - CREDIT/DEPOSIT: text-success (green)
+  - DEBIT/WITHDRAWAL: text-danger (red)
+  - Default: text-muted (gray)
+- **NotificationTypeBadgePipe**: Handles notification type badge classes
+  - Account events: bg-success (green)
+  - Payment success: bg-success (green)
+  - Payment failures: bg-danger (red)
+  - Security alerts: bg-warning (yellow)
+  - Default: bg-info (blue)
+
+**Components Updated**:
+- **AdminComponent**: Already using all reusable pipes (StatusBadgePipe, TransactionTypeClassPipe, NotificationTypeBadgePipe)
+- **PaymentsComponent**: Updated to use StatusBadgePipe for payment status badges
+- **AccountsComponent**: Updated to use StatusBadgePipe for account status badges
+- **TransactionsComponent**: Already using TransactionTypeClassPipe, removed redundant component methods
+
+**Code Cleanup**:
+- **Removed Duplicate Methods**: Eliminated `getAccountStatusClass`, `getPaymentStatusClass`, `getTransactionTypeClass`, `getNotificationStatusClass`, `getNotificationTypeClass` methods from components
+- **Simplified Templates**: Replaced complex `[ngClass]` logic with clean pipe usage
+- **Consistent Styling**: All status badges and type classes now follow the same styling patterns across the application
+
+**Technical Benefits**:
+- **Reusability**: Pipes can be used in any component template across the application
+- **Consistency**: All status/class logic centralized in reusable pipes
+- **Maintainability**: Single source of truth for status/class styling logic
+- **Performance**: Angular pipes are optimized for change detection
+- **Code Reduction**: Eliminated duplicate styling methods across multiple components
+
+**Usage Examples**:
+```html
+<!-- Account status -->
+<span [class]="account.status | statusBadge:'account'">{{ account.status }}</span>
+
+<!-- Payment status -->
+<span [class]="payment.status | statusBadge:'payment'">{{ payment.status }}</span>
+
+<!-- Transaction type -->
+<span [class]="transaction.type | transactionTypeClass">{{ transaction.type }}</span>
+
+<!-- Notification type -->
+<span [class]="notification.type | notificationTypeBadge">{{ notification.type }}</span>
+```
+
+**Status**: ✅ COMPLETED - All components now use reusable pipes for status/class logic, eliminating inline styling methods and ensuring consistency across the application.
+
+---

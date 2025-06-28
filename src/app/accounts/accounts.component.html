@@ -52,11 +52,9 @@
                 <td>{{account.accountType}}</td>
                 <td>{{account.balance | currencyFormat}}</td>
                 <td>
-                  <span class="badge" [ngClass]="{
-                    'bg-success': account.status === 'ACTIVE',
-                    'bg-warning': account.status === 'PENDING',
-                    'bg-danger': account.status === 'FROZEN' || account.status === 'CLOSED'
-                  }">{{account.status}}</span>
+                  <span [class]="account.status | statusBadge:'account'">
+                    {{ account.status }}
+                  </span>
                 </td>
                 <td>
                   <button class="btn btn-sm btn-outline-primary me-1">View Details</button>

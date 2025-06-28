@@ -140,7 +140,7 @@
                   <td class="text-muted">{{ account.userName }}</td>
                   <td>{{ account.balance | currencyFormat }}</td>
                   <td>
-                    <span [class]="getAccountStatusClass(account.status)">
+                    <span [class]="account.status | statusBadge:'account'">
                       {{ account.status }}
                     </span>
                   </td>
@@ -192,7 +192,7 @@
                   <td>{{ payment.amount | currencyFormat }}</td>
                   <td class="text-muted">{{ payment.reference || '-' }}</td>
                   <td>
-                    <span [class]="getPaymentStatusClass(payment.status || 'PENDING')">
+                    <span [class]="(payment.status || 'PENDING') | statusBadge:'payment'">
                       {{ payment.status || 'PENDING' }}
                     </span>
                   </td>
@@ -240,12 +240,12 @@
                 <tr *ngFor="let transaction of transactions">
                   <td class="text-muted">{{ transaction.timestamp | date:'short' }}</td>
                   <td class="fw-medium">{{ transaction.accountNumber }}</td>
-                  <td [class]="getTransactionTypeClass(transaction.type)">
+                  <td [class]="transaction.type | transactionTypeClass">
                     <i class="bi bi-arrow-down-circle me-1" *ngIf="transaction.type === 'CREDIT'"></i>
                     <i class="bi bi-arrow-up-circle me-1" *ngIf="transaction.type === 'DEBIT'"></i>
                     {{ transaction.type }}
                   </td>
-                  <td [class]="getTransactionTypeClass(transaction.type)">
+                  <td [class]="transaction.type | transactionTypeClass">
                     {{ transaction.amount | currencyFormat }}
                   </td>
                   <td class="text-muted">{{ transaction.description }}</td>
@@ -297,13 +297,13 @@
                   <td class="fw-medium">{{ notification.id }}</td>
                   <td class="text-muted">{{ notification.userName }}</td>
                   <td>
-                    <span [class]="getNotificationTypeClass(notification.type)">
+                    <span [class]="notification.type | notificationTypeBadge">
                       {{ notification.type }}
                     </span>
                   </td>
                   <td>{{ notification.message }}</td>
                   <td>
-                    <span [class]="getNotificationStatusClass(notification.status)">
+                    <span [class]="notification.status | statusBadge:'notification'">
                       {{ notification.status }}
                     </span>
                   </td>
