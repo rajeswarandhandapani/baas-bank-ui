@@ -31,7 +31,7 @@ export class PaymentService {
    * Create a new payment using the Payment Processing Saga
    */
   createPayment(payment: CreatePaymentRequest): Observable<Payment> {
-    return this.http.post<Payment>('/api/payments', payment);
+    return this.http.post<Payment>('/api/saga/start/payment-processing', payment);
   }
 
   /**
