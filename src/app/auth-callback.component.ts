@@ -39,8 +39,8 @@ export class AuthCallbackComponent implements OnInit {
         next: (res: any) => {
           this.auth.storeTokens(res);
           if (isRegistration) {
-            // Registration flow: call POST /api/users
-            this.http.post('/api/users', {}).subscribe({
+            // Registration flow: call POST /api/saga/start/user-onboarding
+            this.http.post('/api/saga/start/user-onboarding', {}).subscribe({
               next: () => {
                 localStorage.removeItem('registration_flow');
                 this.redirectToAppropriateHome();
