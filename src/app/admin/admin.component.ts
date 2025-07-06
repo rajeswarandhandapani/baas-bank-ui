@@ -7,6 +7,7 @@ import { Payment } from '../shared/services/payment.service';
 import { Transaction } from '../shared/services/transaction.service';
 import { Notification } from '../shared/services/notification.service';
 import { User } from '../shared/services/user.service';
+import { SagaInstance } from '../shared/services/saga.service';
 import { AdminDashboardService } from '../shared/services/admin-dashboard.service';
 import { CurrencyFormatPipe } from '../shared/pipes/currency-format.pipe';
 import { StatusBadgePipe } from '../shared/pipes/status-badge.pipe';
@@ -33,6 +34,7 @@ export class AdminComponent implements OnInit {
   accounts: Account[] = [];
   payments: Payment[] = [];
   transactions: Transaction[] = [];
+  sagaInstances: SagaInstance[] = [];
   notifications: Notification[] = [];
   users: User[] = [];
 
@@ -42,6 +44,7 @@ export class AdminComponent implements OnInit {
     totalUsers: 0,
     totalPayments: 0,
     totalTransactions: 0,
+    totalSagaInstances: 0,
     totalNotifications: 0
   };
 
@@ -63,6 +66,7 @@ export class AdminComponent implements OnInit {
         this.accounts = data.accounts || [];
         this.payments = data.payments || [];
         this.transactions = data.transactions || [];
+        this.sagaInstances = data.sagaInstances || [];
         this.notifications = data.notifications || [];
         this.users = data.users || [];
 
@@ -70,6 +74,7 @@ export class AdminComponent implements OnInit {
         this.stats.totalAccounts = this.accounts.length;
         this.stats.totalPayments = this.payments.length;
         this.stats.totalTransactions = this.transactions.length;
+        this.stats.totalSagaInstances = this.sagaInstances.length;
         this.stats.totalNotifications = this.notifications.length;
         this.stats.totalUsers = this.users.length;
 

@@ -821,30 +821,41 @@ BaaS Bank Application (Aligned with Available APIs)
    - **Payment Interface**: Enhanced with additional fields: `id`, `createdBy`, `destinationAccountUserName`, `sourceAccountBalance`, `destinationAccountBalance`
    - **Transaction Interface**: Updated with required fields: `id`, `username`, `status`, `reference`
 
-2. **Admin Dashboard Service**:
-   - **Removed Audit Logs**: Eliminated `auditLogs` from `AdminDashboardData` interface since not present in new payload
-   - **Updated Import Structure**: Cleaned up service imports to match new data structure
+2. **Admin Dashboard Service Enhancement**:
+   - **Updated Interface**: Added `sagaInstances` array to `AdminDashboardData` interface
+   - **API Integration**: Maintains single-call composition pattern for saga data
 
-3. **Admin Dashboard Component**:
-   - **Removed Audit Logs Section**: Completely removed audit log display and related methods
-   - **Added Users Section**: New comprehensive user management table showing user details and roles
-   - **Enhanced Payment Display**: Added columns for payment ID, created by, and destination user
-   - **Enhanced Transaction Display**: Added columns for transaction ID, username, status, and reference
-   - **Updated Notification Display**: Simplified to show subject and message without status/reference
-   - **Role-based Styling**: Added visual distinction for admin vs account holder roles
+3. **Admin Dashboard Component Updates**:
+   - **Saga Statistics**: New statistics card showing total saga instances count
+   - **Saga Data Handling**: Integrated saga instances into dashboard data loading
+   - **Error Handling**: Consistent error handling for saga data
 
-4. **Response Payload Compatibility**:
-   - **Users Array**: Now displays all users with their roles and full details
-   - **Enhanced Payment Info**: Shows complete payment tracking information
-   - **Transaction Details**: Displays comprehensive transaction information including user context
-   - **Simplified Notifications**: Focus on core notification content (subject/message)
+4. **Admin Dashboard UI Enhancement**:
+   - **Saga Instances Section**: Comprehensive saga monitoring interface with:
+     - Saga-level information (ID, name, status, timestamps)
+     - Visual status indicators (success/failure/warning badges)
+     - Step-by-step execution details
+     - Payload inspection capabilities
+   - **Responsive Design**: Mobile-friendly table layout with proper Bootstrap styling
+   - **Status Color Coding**: 
+     - Green for COMPLETED sagas/steps
+     - Red for FAILED/ROLLED_BACK sagas/steps  
+     - Yellow for RUNNING/PENDING/STARTED sagas/steps
+     - Gray for other statuses
 
-### New Admin Dashboard Features:
-- **User Management View**: Complete user listing with role identification
-- **Enhanced Payment Tracking**: Detailed payment information with user context
-- **Comprehensive Transaction History**: Full transaction details across all accounts
-- **Streamlined Interface**: Removed audit logs for cleaner, more focused admin view
+### New Saga Monitoring Features:
+- **Process Visibility**: Complete view of saga orchestration including user onboarding and payment processing
+- **Step Tracking**: Detailed step-by-step execution monitoring
+- **Status Management**: Real-time status updates for business processes
+- **Payload Inspection**: Ability to view event payloads for debugging and monitoring
+- **Timestamp Tracking**: Creation and update timestamps for all saga instances and steps
 
-**Status**: ✅ COMPLETED - Admin dashboard successfully updated to match new backend payload structure with enhanced user management and improved data display.
+### Business Process Support:
+- **User Onboarding Saga**: Monitor user creation, account opening, and notification steps
+- **Payment Processing Saga**: Track payment validation, processing, transaction recording, status updates, and notifications
+- **Failure Analysis**: Clear visibility into failed steps and rollback scenarios
+- **Performance Monitoring**: Execution time tracking through created/updated timestamps
+
+**Status**: ✅ COMPLETED - Saga instances successfully integrated into admin dashboard providing comprehensive business process monitoring capabilities.
 
 ---

@@ -63,6 +63,15 @@
         </div>
       </div>
     </div>
+    <div class="col-md-3 mb-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-diagram-3 text-danger fs-1 mb-2"></i>
+          <h5 class="card-title">Total Saga Instances</h5>
+          <h3 class="text-danger mb-0">{{ stats.totalSagaInstances }}</h3>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Global Dashboard Loading/Error State -->
@@ -331,6 +340,99 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Saga Instances Section -->
+  <div class="row mb-4" *ngIf="!loading.dashboard && !errors.dashboard">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-diagram-3 me-2"></i>Saga Instances
+            </h5>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Saga Instances Display -->
+          <div *ngIf="sagaInstances.length === 0" class="text-center text-muted py-4">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            No saga instances found
+          </div>
+
+          <!-- Grouped Saga Instances -->
+          <div *ngIf="sagaInstances.length > 0">
+            <div *ngFor="let saga of sagaInstances; let i = index" class="mb-4">
+              <!-- Saga Header -->
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="d-flex align-items-center">
+                  <h6 class="mb-0 me-2">
+                    <i class="bi bi-gear text-primary me-1"></i>
+                    Saga ID: <code class="text-primary">{{ saga.id }}</code>
+                  </h6>
+                  <span class="badge me-2"
+                        [class.bg-success]="saga.status === 'COMPLETED'"
+                        [class.bg-danger]="saga.status === 'FAILED' || saga.status === 'ROLLED_BACK'"
+                        [class.bg-warning]="saga.status === 'RUNNING' || saga.status === 'PENDING'"
+                        [class.bg-secondary]="saga.status !== 'COMPLETED' && saga.status !== 'FAILED' && saga.status !== 'ROLLED_BACK' && saga.status !== 'RUNNING' && saga.status !== 'PENDING'">
+                    {{ saga.status }}
+                  </span>
+                  <span class="badge bg-info me-2">{{ saga.sagaName }}</span>
+                  <span class="badge bg-secondary">{{ saga.stepInstances.length }} step{{ saga.stepInstances.length !== 1 ? 's' : '' }}</span>
+                </div>
+                <small class="text-muted">
+                  Created: {{ saga.createdAt | date:'short' }} | 
+                  Updated: {{ saga.updatedAt | date:'short' }}
+                </small>
+              </div>
+
+              <!-- Saga Steps -->
+              <div class="card border-start border-primary border-3 mb-3">
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Step ID</th>
+                          <th>Step Name</th>
+                          <th>Status</th>
+                          <th>Created</th>
+                          <th>Updated</th>
+                          <th>Payload</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let step of saga.stepInstances">
+                          <td class="fw-medium">{{ step.id }}</td>
+                          <td class="text-muted">{{ step.stepName }}</td>
+                          <td>
+                            <span class="badge"
+                                  [class.bg-success]="step.status === 'COMPLETED'"
+                                  [class.bg-danger]="step.status === 'FAILED'"
+                                  [class.bg-warning]="step.status === 'STARTED' || step.status === 'PENDING'"
+                                  [class.bg-secondary]="step.status !== 'COMPLETED' && step.status !== 'FAILED' && step.status !== 'STARTED' && step.status !== 'PENDING'">
+                              {{ step.status }}
+                            </span>
+                          </td>
+                          <td class="text-muted">{{ step.createdAt | date:'short' }}</td>
+                          <td class="text-muted">{{ step.updatedAt | date:'short' }}</td>
+                          <td class="text-muted">
+                            <div class="text-truncate" style="max-width: 300px;" 
+                                 [title]="step.payload">
+                              {{ step.payload }}
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

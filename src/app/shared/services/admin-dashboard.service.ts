@@ -6,13 +6,15 @@ import { Payment } from './payment.service';
 import { Transaction } from './transaction.service';
 import { Notification } from './notification.service';
 import { User } from './user.service';
+import { SagaInstance } from './saga.service';
 
 export interface AdminDashboardData {
   users: User[];
   payments: Payment[];
+  sagaInstances: SagaInstance[];
+  transactions: Transaction[];
   notifications: Notification[];
   accounts: Account[];
-  transactions: Transaction[];
 }
 
 @Injectable({
