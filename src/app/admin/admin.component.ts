@@ -5,19 +5,17 @@ import { NavbarComponent } from '../shared/components/navbar/navbar.component';
 import { Account } from '../shared/services/account.service';
 import { Payment } from '../shared/services/payment.service';
 import { Transaction } from '../shared/services/transaction.service';
-import { AuditLog } from '../shared/services/audit.service';
 import { Notification } from '../shared/services/notification.service';
 import { User } from '../shared/services/user.service';
 import { AdminDashboardService } from '../shared/services/admin-dashboard.service';
 import { CurrencyFormatPipe } from '../shared/pipes/currency-format.pipe';
 import { StatusBadgePipe } from '../shared/pipes/status-badge.pipe';
 import { TransactionTypeClassPipe } from '../shared/pipes/transaction-type-class.pipe';
-import { NotificationTypeBadgePipe } from '../shared/pipes/notification-type-badge.pipe';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, CurrencyFormatPipe, StatusBadgePipe, TransactionTypeClassPipe, NotificationTypeBadgePipe],
+  imports: [CommonModule, RouterModule, NavbarComponent, CurrencyFormatPipe, StatusBadgePipe, TransactionTypeClassPipe],
   templateUrl: './admin.component.html'
 })
 export class AdminComponent implements OnInit {
@@ -35,8 +33,6 @@ export class AdminComponent implements OnInit {
   accounts: Account[] = [];
   payments: Payment[] = [];
   transactions: Transaction[] = [];
-  auditLogs: AuditLog[] = [];
-  groupedAuditLogs: { [correlationId: string]: AuditLog[] } = {};
   notifications: Notification[] = [];
   users: User[] = [];
 
@@ -67,7 +63,6 @@ export class AdminComponent implements OnInit {
         this.accounts = data.accounts || [];
         this.payments = data.payments || [];
         this.transactions = data.transactions || [];
-        this.auditLogs = data.auditLogs || [];
         this.notifications = data.notifications || [];
         this.users = data.users || [];
 
@@ -77,9 +72,6 @@ export class AdminComponent implements OnInit {
         this.stats.totalTransactions = this.transactions.length;
         this.stats.totalNotifications = this.notifications.length;
         this.stats.totalUsers = this.users.length;
-
-        // Group audit logs by correlation ID
-        this.groupAuditLogsByCorrelationId(this.auditLogs);
 
         this.loading.dashboard = false;
       },
@@ -96,35 +88,5 @@ export class AdminComponent implements OnInit {
   retryLoad(section: string): void {
     // Only support dashboard-level refresh - no individual section loading
     this.loadAdminDashboard();
-  }
-
-  groupAuditLogsByCorrelationId(logs: AuditLog[]): void {
-    this.groupedAuditLogs = {};
-    
-    logs.forEach(log => {
-      const correlationId = log.correlationId || 'no-correlation-id';
-      
-      if (!this.groupedAuditLogs[correlationId]) {
-        this.groupedAuditLogs[correlationId] = [];
-      }
-      
-      this.groupedAuditLogs[correlationId].push(log);
-    });
-
-    // Sort each group by timestamp (newest first)
-    Object.keys(this.groupedAuditLogs).forEach(correlationId => {
-      this.groupedAuditLogs[correlationId].sort((a, b) => 
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      );
-    });
-  }
-
-  getGroupedAuditLogsEntries(): [string, AuditLog[]][] {
-    return Object.entries(this.groupedAuditLogs).sort((a, b) => {
-      // Sort by the timestamp of the first (newest) log in each group
-      const timestampA = a[1][0]?.timestamp || '';
-      const timestampB = b[1][0]?.timestamp || '';
-      return new Date(timestampB).getTime() - new Date(timestampA).getTime();
-    });
   }
 }

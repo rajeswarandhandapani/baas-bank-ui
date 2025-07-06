@@ -105,6 +105,60 @@
     </div>
   </div>
 
+  <!-- All Users Section -->
+  <div class="row mb-4" *ngIf="!loading.dashboard && !errors.dashboard">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-people me-2"></i>All Users
+            </h5>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Users Table -->
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>User ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Full Name</th>
+                  <th>Roles</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users">
+                  <td class="fw-medium">{{ user.userId }}</td>
+                  <td class="fw-medium">{{ user.username }}</td>
+                  <td class="text-muted">{{ user.email }}</td>
+                  <td class="text-muted">{{ user.fullName }}</td>
+                  <td>
+                    <span 
+                      *ngFor="let role of user.roles" 
+                      class="badge me-1"
+                      [class.bg-primary]="role === 'ROLE_BAAS_ADMIN'"
+                      [class.bg-secondary]="role === 'ROLE_ACCOUNT_HOLDER'">
+                      {{ role }}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="users.length === 0">
+                  <td colspan="5" class="text-center text-muted py-4">
+                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                    No users found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- All Accounts Section -->
   <div class="row mb-4" *ngIf="!loading.dashboard && !errors.dashboard">
     <div class="col-12">
@@ -177,16 +231,20 @@
               <thead class="table-light">
                 <tr>
                   <th>Date</th>
+                  <th>ID</th>
                   <th>From Account</th>
                   <th>To Account</th>
                   <th>Amount</th>
                   <th>Description</th>
                   <th>Status</th>
+                  <th>Created By</th>
+                  <th>Destination User</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let payment of payments">
                   <td class="text-muted">{{ payment.timestamp | date:'short' }}</td>
+                  <td class="fw-medium">{{ payment.id }}</td>
                   <td class="fw-medium">{{ payment.sourceAccountNumber }}</td>
                   <td class="fw-medium">{{ payment.destinationAccountNumber }}</td>
                   <td>{{ payment.amount | currencyFormat }}</td>
@@ -196,9 +254,11 @@
                       {{ payment.status || 'PENDING' }}
                     </span>
                   </td>
+                  <td class="text-muted">{{ payment.createdBy }}</td>
+                  <td class="text-muted">{{ payment.destinationAccountUserName || '-' }}</td>
                 </tr>
                 <tr *ngIf="payments.length === 0">
-                  <td colspan="6" class="text-center text-muted py-4">
+                  <td colspan="9" class="text-center text-muted py-4">
                     <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                     No payments found
                   </td>
@@ -229,30 +289,42 @@
               <thead class="table-light">
                 <tr>
                   <th>Date</th>
+                  <th>ID</th>
                   <th>Account</th>
+                  <th>Username</th>
                   <th>Type</th>
                   <th>Amount</th>
                   <th>Description</th>
+                  <th>Status</th>
+                  <th>Reference</th>
                   <th>Balance</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let transaction of transactions">
                   <td class="text-muted">{{ transaction.timestamp | date:'short' }}</td>
+                  <td class="fw-medium">{{ transaction.id }}</td>
                   <td class="fw-medium">{{ transaction.accountNumber }}</td>
+                  <td class="text-muted">{{ transaction.username }}</td>
                   <td [class]="transaction.type | transactionTypeClass">
-                    <i class="bi bi-arrow-down-circle me-1" *ngIf="transaction.type === 'CREDIT'"></i>
-                    <i class="bi bi-arrow-up-circle me-1" *ngIf="transaction.type === 'DEBIT'"></i>
+                    <i class="bi bi-arrow-down-circle me-1" *ngIf="transaction.type === 'CREDIT' || transaction.type === 'PAYMENT_RECEIVED'"></i>
+                    <i class="bi bi-arrow-up-circle me-1" *ngIf="transaction.type === 'DEBIT' || transaction.type === 'PAYMENT'"></i>
                     {{ transaction.type }}
                   </td>
                   <td [class]="transaction.type | transactionTypeClass">
                     {{ transaction.amount | currencyFormat }}
                   </td>
                   <td class="text-muted">{{ transaction.description }}</td>
-                  <td>{{ (transaction.balance || 0) | currencyFormat }}</td>
+                  <td>
+                    <span [class]="(transaction.status || 'PENDING') | statusBadge:'payment'">
+                      {{ transaction.status || 'PENDING' }}
+                    </span>
+                  </td>
+                  <td class="text-muted">{{ transaction.reference || '-' }}</td>
+                  <td>{{ transaction.balance | currencyFormat }}</td>
                 </tr>
                 <tr *ngIf="transactions.length === 0">
-                  <td colspan="6" class="text-center text-muted py-4">
+                  <td colspan="10" class="text-center text-muted py-4">
                     <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                     No transactions found
                   </td>
@@ -285,10 +357,8 @@
                   <th>Timestamp</th>
                   <th>ID</th>
                   <th>User Name</th>
-                  <th>Type</th>
+                  <th>Subject</th>
                   <th>Message</th>
-                  <th>Status</th>
-                  <th>Reference</th>
                 </tr>
               </thead>
               <tbody>
@@ -296,97 +366,17 @@
                   <td class="text-muted">{{ notification.timestamp | date:'short' }}</td>
                   <td class="fw-medium">{{ notification.id }}</td>
                   <td class="text-muted">{{ notification.userName }}</td>
-                  <td>
-                    <span [class]="notification.type | notificationTypeBadge">
-                      {{ notification.type }}
-                    </span>
-                  </td>
-                  <td>{{ notification.message }}</td>
-                  <td>
-                    <span [class]="notification.status | statusBadge:'notification'">
-                      {{ notification.status }}
-                    </span>
-                  </td>
-                  <td class="text-muted">{{ notification.reference || '-' }}</td>
+                  <td class="fw-medium">{{ notification.subject }}</td>
+                  <td class="text-muted">{{ notification.message }}</td>
                 </tr>
                 <tr *ngIf="notifications.length === 0">
-                  <td colspan="7" class="text-center text-muted py-4">
+                  <td colspan="5" class="text-center text-muted py-4">
                     <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                     No notifications found
                   </td>
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Audit Logs Section -->
-  <div class="row mb-4" *ngIf="!loading.dashboard && !errors.dashboard">
-    <div class="col-12">
-      <div class="card border-0 shadow-sm">
-        <div class="card-header bg-white border-bottom">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
-              <i class="bi bi-file-text me-2"></i>Audit Logs
-            </h5>
-          </div>
-        </div>
-        <div class="card-body">
-          <!-- Audit Logs Table (Grouped by Correlation ID) -->
-          <div class="table-responsive">
-            <!-- Show message if no audit logs -->
-            <div *ngIf="auditLogs.length === 0" class="text-center text-muted py-4">
-              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-              No audit logs found
-            </div>
-
-            <!-- Grouped Audit Logs -->
-            <div *ngIf="auditLogs.length > 0">
-              <div *ngFor="let group of getGroupedAuditLogsEntries(); let i = index" class="mb-4">
-                <!-- Correlation ID Header -->
-                <div class="d-flex align-items-center mb-2">
-                  <h6 class="mb-0 me-2">
-                    <i class="bi bi-link-45deg text-primary me-1"></i>
-                    Correlation ID: 
-                    <code class="text-primary">{{ group[0] === 'no-correlation-id' ? 'No Correlation ID' : group[0] }}</code>
-                  </h6>
-                  <span class="badge bg-secondary ms-2">{{ group[1].length }} log{{ group[1].length !== 1 ? 's' : '' }}</span>
-                </div>
-
-                <!-- Logs for this Correlation ID -->
-                <div class="card border-start border-primary border-3 mb-3">
-                  <div class="card-body p-0">
-                    <table class="table table-sm table-hover mb-0">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Timestamp</th>
-                          <th>ID</th>
-                          <th>Username</th>
-                          <th>Event Type</th>
-                          <th>Service Name</th>
-                          <th>Details</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let log of group[1]">
-                          <td class="text-muted">{{ log.timestamp | date:'short' }}</td>
-                          <td class="fw-medium">{{ log.id }}</td>
-                          <td>{{ log.username }}</td>
-                          <td>
-                            <span class="badge bg-primary">{{ log.eventType }}</span>
-                          </td>
-                          <td class="text-muted">{{ log.serviceName || '-' }}</td>
-                          <td class="text-muted">{{ log.details || '-' }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

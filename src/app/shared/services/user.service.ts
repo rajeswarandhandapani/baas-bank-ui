@@ -3,14 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface User {
-  id?: string;
+  userId: number;
   username: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
-  roles?: string[];
-  enabled?: boolean;
-  createdAt?: string;
+  fullName: string;
+  roles: string[];
 }
 
 export interface UserProfile {

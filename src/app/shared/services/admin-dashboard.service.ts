@@ -4,17 +4,15 @@ import { Observable } from 'rxjs';
 import { Account } from './account.service';
 import { Payment } from './payment.service';
 import { Transaction } from './transaction.service';
-import { AuditLog } from './audit.service';
 import { Notification } from './notification.service';
 import { User } from './user.service';
 
 export interface AdminDashboardData {
-  transactions: Transaction[];
-  notifications: Notification[];
-  accounts: Account[];
-  auditLogs: AuditLog[];
   users: User[];
   payments: Payment[];
+  notifications: Notification[];
+  accounts: Account[];
+  transactions: Transaction[];
 }
 
 @Injectable({

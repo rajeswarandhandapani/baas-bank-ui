@@ -5,10 +5,8 @@ import { Observable } from 'rxjs';
 export interface Notification {
   id: number;
   userName: string;
-  type: string;
+  subject: string;
   message: string;
-  status: string;
-  reference: string;
   timestamp: string;
 }
 

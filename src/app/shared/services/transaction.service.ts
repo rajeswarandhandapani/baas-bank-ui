@@ -3,15 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Transaction {
-  id?: string;
+  id: number;
   accountNumber: string;
-  type: string;
   amount: number;
+  type: string;
   description: string;
-  timestamp?: string;
-  balance?: number;
-  reference?: string;
-  status?: string;
+  status: string;
+  reference: string;
+  timestamp: string;
+  username: string;
+  balance: number;
 }
 
 @Injectable({

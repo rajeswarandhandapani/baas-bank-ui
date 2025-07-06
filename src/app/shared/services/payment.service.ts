@@ -3,14 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Payment {
-  id?: string;
+  id: number;
   sourceAccountNumber: string;
   destinationAccountNumber: string;
   amount: number;
+  status: string;
   description: string;
-  status?: string;
-  timestamp?: string;
-  createdBy?: string;
+  timestamp: string;
+  createdBy: string;
+  destinationAccountUserName?: string;
+  sourceAccountBalance: number;
+  destinationAccountBalance: number;
 }
 
 export interface CreatePaymentRequest {
