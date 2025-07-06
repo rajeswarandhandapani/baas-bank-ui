@@ -180,7 +180,7 @@
                   <th>From Account</th>
                   <th>To Account</th>
                   <th>Amount</th>
-                  <th>Reference</th>
+                  <th>Description</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -190,7 +190,7 @@
                   <td class="fw-medium">{{ payment.sourceAccountNumber }}</td>
                   <td class="fw-medium">{{ payment.destinationAccountNumber }}</td>
                   <td>{{ payment.amount | currencyFormat }}</td>
-                  <td class="text-muted">{{ payment.reference || '-' }}</td>
+                  <td class="text-muted">{{ payment.description || '-' }}</td>
                   <td>
                     <span [class]="(payment.status || 'PENDING') | statusBadge:'payment'">
                       {{ payment.status || 'PENDING' }}

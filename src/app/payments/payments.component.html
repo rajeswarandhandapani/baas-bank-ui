@@ -84,19 +84,19 @@
                 </div>
               </div>
 
-              <!-- Reference -->
+              <!-- Description -->
               <div class="col-md-6 mb-3">
-                <label for="reference" class="form-label">Reference</label>
+                <label for="description" class="form-label">Description</label>
                 <input 
                   type="text" 
                   class="form-control" 
-                  id="reference"
-                  formControlName="reference"
-                  placeholder="Payment reference/description"
+                  id="description"
+                  formControlName="description"
+                  placeholder="Payment description"
                   maxlength="255"
-                  [class.is-invalid]="paymentForm.get('reference')?.invalid && paymentForm.get('reference')?.touched">
-                <div class="invalid-feedback" *ngIf="paymentForm.get('reference')?.invalid && paymentForm.get('reference')?.touched">
-                  Please enter a payment reference.
+                  [class.is-invalid]="paymentForm.get('description')?.invalid && paymentForm.get('description')?.touched">
+                <div class="invalid-feedback" *ngIf="paymentForm.get('description')?.invalid && paymentForm.get('description')?.touched">
+                  Please enter a payment description.
                 </div>
               </div>
             </div>
@@ -167,7 +167,7 @@
                   <th>From Account</th>
                   <th>To Account</th>
                   <th>Amount</th>
-                  <th>Reference</th>
+                  <th>Description</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -177,7 +177,7 @@
                   <td>{{ payment.sourceAccountNumber }}</td>
                   <td>{{ payment.destinationAccountNumber }}</td>
                   <td>{{ payment.amount | currencyFormat }}</td>
-                  <td>{{ payment.reference }}</td>
+                  <td>{{ payment.description }}</td>
                   <td>
                     <span [class]="(payment.status || 'PENDING') | statusBadge:'payment'">
                       {{ payment.status || 'PENDING' }}

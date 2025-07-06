@@ -7,7 +7,7 @@ export interface Payment {
   sourceAccountNumber: string;
   destinationAccountNumber: string;
   amount: number;
-  reference: string;
+  description: string;
   status?: string;
   timestamp?: string;
   createdBy?: string;
@@ -17,7 +17,7 @@ export interface CreatePaymentRequest {
   sourceAccountNumber: string;
   destinationAccountNumber: string;
   amount: number;
-  reference: string;
+  description: string;
 }
 
 @Injectable({

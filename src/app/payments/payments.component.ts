@@ -32,7 +32,7 @@ export class PaymentsComponent implements OnInit {
       sourceAccountNumber: ['', Validators.required],
       destinationAccountNumber: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       amount: ['', [Validators.required, Validators.min(0.01)]],
-      reference: ['', [Validators.required, Validators.maxLength(255)]]
+      description: ['', [Validators.required, Validators.maxLength(255)]]
     });
   }
 
