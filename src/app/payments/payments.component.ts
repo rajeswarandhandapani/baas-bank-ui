@@ -89,9 +89,17 @@ export class PaymentsComponent implements OnInit {
           this.loadPaymentHistory();
         },
         error: (err) => {
-          console.error('Error creating payment:', err);
-          this.error = true;
-          this.loadingForm = false;
+          // Handle HTTP 202 as a success (async processing)
+          if (err.status === 202) {
+            this.successMessage = 'Payment request accepted and is being processed.';
+            this.paymentForm.reset();
+            this.loadingForm = false;
+            this.loadPaymentHistory();
+          } else {
+            console.error('Error creating payment:', err);
+            this.error = true;
+            this.loadingForm = false;
+          }
         }
       });
     }
