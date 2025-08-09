@@ -356,6 +356,20 @@ BaaS Bank Application (Aligned with Available APIs)
 - ✅ Unit and integration testing
 - ✅ Documentation and deployment guide
 
+### Phase X: Support Chat Widget (Experimental) - Small Step
+
+Added a minimal floating chat widget for authenticated users that connects to a local chatbot service.
+
+- Scope: UI widget + HTTP POST /chat?userInput=... via dev proxy `/chatbot` -> `http://localhost:8082`
+- Auth: Widget is rendered only when the user is authenticated (client-side check)
+- Notes: Not part of core banking API; toggleable UI, no backend changes to BaaS APIs
+- Files:
+  - `src/app/shared/components/chat-widget/chat-widget.component.ts`
+  - `src/app/shared/services/chat.service.ts`
+  - `src/app/app.component.html` includes `<app-chat-widget>`
+  - `proxy.conf.json` updated to add `/chatbot` proxy
+
+
 ## Success Metrics
 
 ### User Experience Metrics

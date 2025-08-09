@@ -3,8 +3,15 @@
     "target": "http://localhost:8080",
     "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug",
+    "logLevel": "trace",
     "pathRewrite": { "^/api": "/api" }
+  },
+  "/chatbot": {
+    "target": "http://localhost:8082",
+    "secure": false,
+    "changeOrigin": true,
+  "logLevel": "debug",
+  "pathRewrite": { "^/chatbot": "" }
   }
 }
 
