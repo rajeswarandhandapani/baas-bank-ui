@@ -17,6 +17,7 @@ export class ChatWidgetComponent {
   open = false;
   draft = '';
   messages$: Observable<ChatMessage[]> = this.chat.messages$;
+  isLoading$ = this.chat.isLoading$;
 
   isAuthenticated(): boolean {
     return this.auth.isAuthenticated();
