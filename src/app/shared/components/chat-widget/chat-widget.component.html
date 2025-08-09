@@ -14,7 +14,7 @@
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-        <div class="card-body p-2" style="height: 400px; overflow: auto;">
+    <div class="card-body p-2" style="height: 400px; overflow: auto;" #scrollContainer>
             <ng-container *ngIf="messages$ | async as messages">
                 <div *ngFor="let m of messages" class="my-2">
                     <div class="d-flex" [ngClass]="{
