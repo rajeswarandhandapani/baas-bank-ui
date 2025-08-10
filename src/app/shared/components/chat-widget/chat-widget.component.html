@@ -14,7 +14,7 @@
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-    <div class="card-body p-2" style="height: 400px; overflow: auto;" #scrollContainer>
+    <div class="card-body p-2" style="height: 600px; overflow: auto;" #scrollContainer>
             <ng-container *ngIf="messages$ | async as messages">
                 <div *ngFor="let m of messages" class="my-2">
                     <div class="d-flex align-items-start gap-2" [ngClass]="{
@@ -25,14 +25,14 @@
                         <ng-container *ngIf="m.sender === 'user'">
                             <i class="bi bi-person-circle text-primary fs-5 flex-shrink-0 mt-1"></i>
                         </ng-container>
-                        <div class="px-3 py-2 rounded-3"
-                             [ngClass]="{
-                                'bg-primary text-white': m.sender === 'user',
-                                'bg-light border': m.sender === 'bot'
-                             }"
-                             style="max-width: 80%; white-space: pre-wrap;">
-                            {{ m.text }}
-                        </div>
+                                <div class="px-3 py-2 rounded-3"
+                                      [ngClass]="{
+                                          'bg-primary text-white': m.sender === 'user',
+                                          'bg-light border': m.sender === 'bot'
+                                      }"
+                                      style="max-width: 80%;"
+                                      [innerHTML]="m.text">
+                                </div>
                         <!-- Bot icon (right) -->
                         <ng-container *ngIf="m.sender === 'bot'">
                             <i class="bi bi-robot text-info fs-5 flex-shrink-0 mt-1"></i>
