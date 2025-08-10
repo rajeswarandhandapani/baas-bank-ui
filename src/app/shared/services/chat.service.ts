@@ -11,7 +11,9 @@ export interface ChatMessage {
 export class ChatService {
     // Use dev-server proxy to avoid CORS: see proxy.conf.json (/chatbot -> http://localhost:8082)
     private baseUrl = '/chatbot';
-    private messagesSubject = new BehaviorSubject<ChatMessage[]>([]);
+    private messagesSubject = new BehaviorSubject<ChatMessage[]>([
+        { sender: 'bot', text: 'Welcome to BaaS Bank. How can I help you today? I can help with viewing your BAAS Bank accounts, transactions, payments, and notifications' }
+    ]);
     messages$ = this.messagesSubject.asObservable();
     private loadingSubject = new BehaviorSubject<boolean>(false);
     isLoading$ = this.loadingSubject.asObservable();
