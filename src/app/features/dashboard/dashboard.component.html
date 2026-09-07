@@ -1,0 +1,112 @@
+<app-navbar />
+<main id="main" class="workspace">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">YOUR EVERYDAY, AT A GLANCE</span>
+      <h1>
+        Hello, {{ auth.name().split(" ")[0] }}<span class="green">.</span>
+      </h1>
+      <p>Let’s make your next move a little simpler.</p>
+    </div>
+    <a class="button" routerLink="/payments">Make a payment ↗</a>
+  </header>
+  <app-page-state
+    [loading]="accounts.isLoading()"
+    [error]="accounts.error()"
+    (retry)="accounts.reload()"
+  />
+  @if (!accounts.isLoading() && !accounts.error()) {
+    <section class="overview-grid">
+      <article class="balance-card">
+        <div class="card-eyebrow">TOTAL AVAILABLE BALANCE <span>◉</span></div>
+        <h2>{{ balance() | currency }}</h2>
+        <p>Across {{ accounts.value().length }} personal accounts</p>
+        <div class="balance-footer">
+          <span>YOUR MONEY. YOUR POSSIBILITIES.</span
+          ><a routerLink="/accounts" aria-label="View accounts">↗</a>
+        </div>
+      </article>
+      <article class="quick-card">
+        <span class="eyebrow">A GOOD PLACE TO START</span>
+        <h2>Everything in<br />its right place.</h2>
+        <a routerLink="/accounts">Explore your accounts <span>↗</span></a
+        ><a routerLink="/transactions">Check your activity <span>↗</span></a>
+      </article>
+    </section>
+    <section class="section">
+      <div class="section-heading">
+        <h2>
+          Your accounts <span class="count">{{ accounts.value().length }}</span>
+        </h2>
+        <a routerLink="/accounts">View all ↗</a>
+      </div>
+      <div class="account-grid">
+        @for (account of accounts.value().slice(0, 3); track account.id) {
+          <article class="account-card">
+            <div class="account-card-top">
+              <span class="account-symbol">▤</span
+              ><span
+                class="badge"
+                [class.failed]="account.status !== 'ACTIVE'"
+                >{{ account.status }}</span
+              >
+            </div>
+            <h3>{{ account.accountType }} account</h3>
+            <p class="mono">{{ account.accountNumber }}</p>
+            <strong class="account-balance">{{
+              account.balance | currency
+            }}</strong
+            ><small>Available balance</small>
+          </article>
+        } @empty {
+          <div class="empty-state">
+            <h3>Your next chapter starts here.</h3>
+            <p>Your accounts will appear here once account setup completes.</p>
+            <button class="button secondary" (click)="accounts.reload()">
+              Refresh accounts
+            </button>
+          </div>
+        }
+      </div>
+    </section>
+  }
+  <section class="section">
+    <div class="section-heading">
+      <h2>Recent activity</h2>
+      <a routerLink="/transactions">All transactions ↗</a>
+    </div>
+    <app-page-state
+      [loading]="activity.isLoading()"
+      [error]="activity.error()"
+      (retry)="activity.reload()"
+    />
+    @if (!activity.isLoading() && !activity.error()) {
+      <div class="panel">
+        @for (item of recent(); track item.id) {
+          <div class="activity-row">
+            <span class="activity-icon">{{
+              item.type === "CREDIT" ? "↙" : "↗"
+            }}</span>
+            <div>
+              <strong>{{ item.description || item.type }}</strong
+              ><small>{{ item.timestamp | date: "MMM d, y · h:mm a" }}</small>
+            </div>
+            <strong class="amount" [class.green]="item.type === 'CREDIT'"
+              >{{ item.type === "CREDIT" ? "+" : "−"
+              }}{{ item.amount | currency }}</strong
+            >
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <span class="empty-icon">⇄</span>
+            <h3>A fresh start.</h3>
+            <p>Your transactions will show up here when money moves.</p>
+          </div>
+        }
+      </div>
+    }
+  </section>
+  <footer class="workspace-footer">
+    A little clarity goes a long way.<span>baas bank</span>
+  </footer>
+</main>

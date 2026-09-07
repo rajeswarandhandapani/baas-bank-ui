@@ -1,0 +1,84 @@
+<div class="landing">
+  <header class="landing-nav">
+    <a class="brand" href="/"
+      ><span class="brand-mark">b.</span> baas<span class="brand-light"
+        >bank</span
+      ></a
+    ><span class="landing-tag">A little clarity. A lot of possibility.</span
+    ><button class="button secondary" (click)="login()">
+      Sign in <span>↗</span>
+    </button>
+  </header>
+  <main class="hero">
+    <section class="hero-copy">
+      <span class="eyebrow"
+        ><span class="live-dot"></span> YOUR MONEY, IN FOCUS</span
+      >
+      <h1>Banking that<br />makes room<br />for <em>your life.</em></h1>
+      <p>
+        A clearer view of your accounts. Simpler payments.<br />Everything you
+        need, in one thoughtful workspace.
+      </p>
+      <div class="hero-actions">
+        <button class="button" (click)="login()">
+          Go to your bank <span>↗</span></button
+        ><button class="text-button" (click)="login(true)">
+          Set up your account →
+        </button>
+      </div>
+      @if (error()) {
+        <p role="alert">{{ error() }}</p>
+      }
+      <div class="hero-footnote">
+        <span class="outline-icon">◇</span> Secure sign-in. A workspace that’s
+        yours.
+      </div>
+    </section>
+    <section
+      class="hero-art"
+      aria-label="Illustration of the banking workspace"
+    >
+      <div class="orbit orbit-one"></div>
+      <div class="orbit orbit-two"></div>
+      <div class="preview-card">
+        <div class="preview-top">
+          <span class="brand-mark">b.</span><span>PERSONAL BANKING</span
+          ><span>◉</span>
+        </div>
+        <p>Your everyday, simplified.</p>
+        <h2>More clarity.<br />More possibility.</h2>
+        <div class="preview-bottom">
+          <span>BAAS BANK</span><span>•••• &nbsp; ••••</span>
+        </div>
+      </div>
+      <div class="floating-note">
+        <span class="note-icon">↗</span>
+        <div>
+          <strong>Make your next move.</strong
+          ><small>Payments, without the extra steps.</small>
+        </div>
+      </div>
+      <span class="art-caption">DESIGNED AROUND YOU</span>
+    </section>
+  </main>
+  <section class="value-grid" aria-label="Banking features">
+    <article>
+      <span>01 / ACCOUNTS</span>
+      <h2>See the whole picture.</h2>
+      <p>Your balances and account details, together at a glance.</p>
+    </article>
+    <article>
+      <span>02 / PAYMENTS</span>
+      <h2>Keep life moving.</h2>
+      <p>Send money and follow each payment’s progress.</p>
+    </article>
+    <article>
+      <span>03 / ACTIVITY</span>
+      <h2>Every detail, in view.</h2>
+      <p>A clear record of what came in and what went out.</p>
+    </article>
+  </section>
+  <footer class="landing-footer">
+    <span>baas bank</span><span>Banking, thoughtfully simple.</span>
+  </footer>
+</div>

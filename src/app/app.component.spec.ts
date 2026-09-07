@@ -1,29 +1,15 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { AppComponent } from './app.component';
-
-describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+describe('Application shell', () => {
+  it('hosts lazy routed pages', () => {
+    TestBed.configureTestingModule({
       imports: [AppComponent],
-    }).compileComponents();
-  });
-
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'baas-bank-ui' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('baas-bank-ui');
-  });
-
-  it('should render title', () => {
+      providers: [provideRouter([]), provideHttpClient()],
+    });
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, baas-bank-ui');
+    expect(fixture.nativeElement.querySelector('router-outlet')).toBeTruthy();
   });
 });

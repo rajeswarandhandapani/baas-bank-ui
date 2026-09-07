@@ -1,0 +1,40 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { API_BASE_URL } from '../../../core/config/app.constants';
+
+export interface Account {
+  id: number | string;
+  accountNumber: string;
+  accountType: string;
+  userId: string;
+  userName: string;
+  balance: number;
+  status: string;
+  createdTimestamp: string;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AccountService {
+  private apiUrl = API_BASE_URL;
+
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Get the current user's accounts
+   * @returns Observable of Account array
+   */
+  getMyAccounts(): Observable<Account[]> {
+    return this.http.get<Account[]>(`${this.apiUrl}/accounts/my-accounts`);
+  }
+
+  /**
+   * Get all accounts (admin only)
+   * @returns Observable of Account array
+   */
+  getAllAccounts(): Observable<Account[]> {
+    return this.http.get<Account[]>(`${this.apiUrl}/accounts`);
+  }
+}

@@ -1,0 +1,65 @@
+<app-navbar />
+<main id="main" class="workspace">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">A HOME FOR YOUR MONEY</span>
+      <h1>Your accounts<span class="green">.</span></h1>
+      <p>The details you need. The clarity you deserve.</p>
+    </div>
+    <button
+      class="button secondary"
+      (click)="accounts.reload()"
+      [disabled]="accounts.isLoading()"
+    >
+      Refresh ↻
+    </button>
+  </header>
+  <app-page-state
+    [loading]="accounts.isLoading()"
+    [error]="accounts.error()"
+    (retry)="accounts.reload()"
+  />
+  @if (!accounts.isLoading() && !accounts.error()) {
+    <div class="summary-strip">
+      <span>Total available balance</span
+      ><strong>{{ total() | currency }}</strong
+      ><span>{{ accounts.value().length }} accounts</span>
+    </div>
+    <div class="account-grid">
+      @for (account of accounts.value(); track account.id) {
+        <article class="account-card">
+          <div class="account-card-top">
+            <span class="account-symbol">▤</span
+            ><span class="badge" [class.failed]="account.status !== 'ACTIVE'">{{
+              account.status
+            }}</span>
+          </div>
+          <h2>{{ account.accountType }} account</h2>
+          <p class="mono">{{ account.accountNumber }}</p>
+          <strong class="account-balance">{{
+            account.balance | currency
+          }}</strong
+          ><small>Available balance</small>
+          <dl>
+            <div>
+              <dt>Account holder</dt>
+              <dd>{{ account.userName }}</dd>
+            </div>
+            <div>
+              <dt>Opened</dt>
+              <dd>{{ account.createdTimestamp | date: "MMM d, y" }}</dd>
+            </div>
+          </dl>
+          <a class="button secondary full" routerLink="/payments"
+            >Make a payment ↗</a
+          >
+        </article>
+      } @empty {
+        <div class="empty-state panel">
+          <h2>Your accounts are on their way.</h2>
+          <p>If you just set up your account, refresh in a moment.</p>
+        </div>
+      }
+    </div>
+  }
+</main>

@@ -2,14 +2,17 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'statusBadge',
-  standalone: true
+  standalone: true,
 })
 export class StatusBadgePipe implements PipeTransform {
-  transform(status: string, type: 'account' | 'payment' | 'notification'): string {
+  transform(
+    status: string,
+    type: 'account' | 'payment' | 'notification',
+  ): string {
     if (!status) return 'badge bg-secondary';
-    
+
     const upperStatus = status.toUpperCase();
-    
+
     switch (type) {
       case 'account':
         return this.getAccountStatusClass(upperStatus);

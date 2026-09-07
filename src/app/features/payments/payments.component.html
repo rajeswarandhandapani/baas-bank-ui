@@ -1,0 +1,201 @@
+<app-navbar />
+<main id="main" class="workspace">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">MAKE YOUR NEXT MOVE</span>
+      <h1>Payments<span class="green">.</span></h1>
+      <p>From your account to theirs, with a few simple details.</p>
+    </div>
+  </header>
+  <div class="payment-layout">
+    <section class="panel form-panel">
+      <div class="section-heading">
+        <h2>Send a payment</h2>
+        <span class="account-symbol">↗</span>
+      </div>
+      <app-page-state
+        [loading]="accounts.isLoading()"
+        [error]="accounts.error()"
+        (retry)="accounts.reload()"
+      />
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label for="source">From account</label
+        ><select id="source" formControlName="sourceAccountNumber">
+          <option value="">Choose your account</option>
+          @for (account of accounts.value(); track account.id) {
+            @if (account.status === "ACTIVE") {
+              <option [value]="account.accountNumber">
+                {{ account.accountType }} · {{ account.accountNumber }} ·
+                {{ account.balance | currency }}
+              </option>
+            }
+          }
+        </select>
+        @if (
+          form.controls.sourceAccountNumber.touched &&
+          form.controls.sourceAccountNumber.invalid
+        ) {
+          <p class="field-error">Select a source account.</p>
+        }
+        <label for="destination">Destination account number</label
+        ><input
+          id="destination"
+          inputmode="numeric"
+          formControlName="destinationAccountNumber"
+          placeholder="Enter account number"
+        />
+        @if (
+          form.controls.destinationAccountNumber.touched &&
+          form.controls.destinationAccountNumber.invalid
+        ) {
+          <p class="field-error">Enter a valid numeric account number.</p>
+        }
+        <label for="amount">Amount <span>USD</span></label>
+        <div class="amount-input">
+          <span>$</span
+          ><input
+            id="amount"
+            type="number"
+            min="0.01"
+            step="0.01"
+            formControlName="amount"
+          />
+        </div>
+        @if (form.controls.amount.touched && form.controls.amount.invalid) {
+          <p class="field-error">Enter an amount of at least $0.01.</p>
+        }
+        <label for="description">What’s it for?</label
+        ><input
+          id="description"
+          formControlName="description"
+          maxlength="255"
+          placeholder="Add a payment description"
+        />
+        @if (
+          form.controls.description.touched && form.controls.description.invalid
+        ) {
+          <p class="field-error">Add a description (up to 255 characters).</p>
+        }
+        @if (error()) {
+          <p class="alert error-state" role="alert">{{ error() }}</p>
+        }
+        @if (message()) {
+          <p class="alert success-state" role="status">{{ message() }}</p>
+        }
+        <button
+          class="button full"
+          type="submit"
+          [disabled]="
+            sending() ||
+            accounts.isLoading() ||
+            !!accounts.error() ||
+            !accounts.value().length
+          "
+        >
+          {{ sending() ? "Submitting…" : "Submit payment" }} <span>↗</span>
+        </button>
+        <p class="form-note">
+          Check the destination carefully. Your payment status will appear in
+          your history.
+        </p>
+      </form>
+    </section>
+    <aside class="payment-aside">
+      <span class="eyebrow">A LITTLE PEACE OF MIND</span>
+      <h2>Good to know.</h2>
+      <div>
+        <span>01</span>
+        <h3>Check the details</h3>
+        <p>
+          Make sure the account number and amount are correct before sending.
+        </p>
+      </div>
+      <div>
+        <span>02</span>
+        <h3>Follow your payment</h3>
+        <p>
+          Submitted payments are processed asynchronously. Pending statuses
+          refresh automatically.
+        </p>
+      </div>
+      <div>
+        <span>03</span>
+        <h3>Keep the full picture</h3>
+        <p>
+          Completed transfers appear in your transaction history with your
+          updated balance.
+        </p>
+      </div>
+    </aside>
+  </div>
+  <section class="section">
+    <div class="section-heading">
+      <h2>Payment history</h2>
+      <button
+        class="text-button"
+        (click)="payments.reload()"
+        [disabled]="payments.isLoading()"
+      >
+        Refresh ↻
+      </button>
+    </div>
+    <app-page-state
+      [loading]="payments.isLoading()"
+      [error]="payments.error()"
+      (retry)="payments.reload()"
+    />
+    @if (!payments.isLoading() && !payments.error()) {
+      <div class="panel table-scroll">
+        <table>
+          <caption class="sr-only">
+            Payment history
+          </caption>
+          <thead>
+            <tr>
+              <th>Payment</th>
+              <th>To account</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th class="text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (payment of sorted(); track payment.id) {
+              <tr>
+                <td>
+                  <strong>{{ payment.description }}</strong
+                  ><small>From {{ payment.sourceAccountNumber }}</small>
+                </td>
+                <td class="mono">{{ payment.destinationAccountNumber }}</td>
+                <td>{{ payment.timestamp | date: "MMM d, y · h:mm a" }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [class.failed]="payment.status === 'FAILED'"
+                    [class.pending]="
+                      payment.status === 'PENDING' ||
+                      payment.status === 'PROCESSING'
+                    "
+                    >{{ payment.status }}</span
+                  >
+                </td>
+                <td class="text-right money">
+                  {{ payment.amount | currency }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5">
+                  <div class="empty-state">
+                    <h3>Ready when you are.</h3>
+                    <p>Your submitted payments will appear here.</p>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</main>

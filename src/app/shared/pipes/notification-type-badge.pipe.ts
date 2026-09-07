@@ -2,12 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'notificationTypeBadge',
-  standalone: true
+  standalone: true,
 })
 export class NotificationTypeBadgePipe implements PipeTransform {
   transform(type: string): string {
     if (!type) return 'badge bg-info';
-    
+
     switch (type.toUpperCase()) {
       case 'ACCOUNT_OPENED':
       case 'ACCOUNT_CREATED':

@@ -1,41 +1,55 @@
-import {Routes} from '@angular/router';
-import {WelcomeComponent} from './welcome.component';
-import {AuthCallbackComponent} from './auth-callback.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {AccountsComponent} from './accounts/accounts.component';
-import {PaymentsComponent} from './payments/payments.component';
-import {TransactionsComponent} from './transactions/transactions.component';
-import {AdminComponent} from './admin/admin.component';
-import {authGuard, guestGuard, userGuard} from './auth.guard';
-import {adminGuard} from './admin.guard';
-
+import { Routes } from '@angular/router';
+import { guestGuard, userGuard } from './core/auth/auth.guard';
+import { adminGuard } from './core/auth/admin.guard';
 export const routes: Routes = [
-  { path: '', component: WelcomeComponent, canActivate: [guestGuard] },
-  { path: 'auth/callback', component: AuthCallbackComponent },
   {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [userGuard]
+    path: '',
+    title: 'BaaS Bank · Banking, thoughtfully simple',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/welcome/welcome.component').then(
+        (m) => m.WelcomeComponent,
+      ),
   },
   {
-    path: 'accounts',
-    component: AccountsComponent,
-    canActivate: [userGuard]
+    path: 'auth/callback',
+    title: 'Signing in · BaaS Bank',
+    loadComponent: () =>
+      import('./core/auth/auth-callback.component').then(
+        (m) => m.AuthCallbackComponent,
+      ),
   },
-  {
-    path: 'payments',
-    component: PaymentsComponent,
-    canActivate: [userGuard]
-  },  {
-    path: 'transactions',
-    component: TransactionsComponent,
-    canActivate: [userGuard]
-  },
+  ...(['dashboard', 'accounts', 'payments', 'transactions'] as const).map(
+    (path) => ({
+      path,
+      canActivate: [userGuard],
+      title: `${path.charAt(0).toUpperCase() + path.slice(1)} · BaaS Bank`,
+      loadComponent: {
+        dashboard: () =>
+          import('./features/dashboard/dashboard.component').then(
+            (m) => m.DashboardComponent,
+          ),
+        accounts: () =>
+          import('./features/accounts/accounts.component').then(
+            (m) => m.AccountsComponent,
+          ),
+        payments: () =>
+          import('./features/payments/payments.component').then(
+            (m) => m.PaymentsComponent,
+          ),
+        transactions: () =>
+          import('./features/transactions/transactions.component').then(
+            (m) => m.TransactionsComponent,
+          ),
+      }[path],
+    }),
+  ),
   {
     path: 'admin',
-    component: AdminComponent,
-    canActivate: [adminGuard]
+    title: 'Operations · BaaS Bank',
+    canActivate: [adminGuard],
+    loadComponent: () =>
+      import('./features/admin/admin.component').then((m) => m.AdminComponent),
   },
-  // Wildcard route for handling undefined routes
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];

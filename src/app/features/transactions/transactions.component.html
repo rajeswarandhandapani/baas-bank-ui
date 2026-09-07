@@ -1,0 +1,118 @@
+<app-navbar />
+<main id="main" class="workspace">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">EVERY MOVE, IN VIEW</span>
+      <h1>Your activity<span class="green">.</span></h1>
+      <p>A clear record of money in and money out.</p>
+    </div>
+    <button
+      class="button secondary"
+      (click)="transactions.reload()"
+      [disabled]="transactions.isLoading()"
+    >
+      Refresh ↻
+    </button>
+  </header>
+  <div class="toolbar">
+    <label class="search-label"
+      ><span class="sr-only">Search transactions</span
+      ><input
+        type="search"
+        placeholder="Search description, account or reference…"
+        [value]="query()"
+        (input)="query.set($any($event.target).value)"
+    /></label>
+    <div class="segmented" aria-label="Transaction type">
+      @for (type of ["ALL", "CREDIT", "DEBIT"]; track type) {
+        <button
+          [class.selected]="filter() === type"
+          [attr.aria-pressed]="filter() === type"
+          (click)="filter.set(type)"
+        >
+          {{
+            type === "ALL"
+              ? "All activity"
+              : type === "CREDIT"
+                ? "Money in"
+                : "Money out"
+          }}
+        </button>
+      }
+    </div>
+  </div>
+  <app-page-state
+    [loading]="transactions.isLoading()"
+    [error]="transactions.error()"
+    (retry)="transactions.reload()"
+  />
+  @if (!transactions.isLoading() && !transactions.error()) {
+    <div class="panel table-scroll">
+      <table>
+        <caption class="sr-only">
+          Your transactions
+        </caption>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Account</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th class="text-right">Amount</th>
+            <th class="text-right">Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filtered(); track item.id) {
+            <tr>
+              <td>
+                <strong>{{ item.description || "Transfer" }}</strong
+                ><small>{{ item.reference }}</small>
+              </td>
+              <td class="mono">{{ item.accountNumber }}</td>
+              <td>
+                {{ item.timestamp | date: "MMM d, y"
+                }}<small>{{ item.timestamp | date: "h:mm a" }}</small>
+              </td>
+              <td>
+                <span class="badge" [class.neutral]="item.type !== 'CREDIT'">{{
+                  item.type
+                }}</span>
+              </td>
+              <td
+                class="text-right money"
+                [class.green]="item.type === 'CREDIT'"
+              >
+                {{ item.type === "CREDIT" ? "+" : "−"
+                }}{{ item.amount | currency }}
+              </td>
+              <td class="text-right money">{{ item.balance | currency }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">
+                <div class="empty-state">
+                  <h3>
+                    {{
+                      query() || filter() !== "ALL"
+                        ? "No matching transactions."
+                        : "Your story is just beginning."
+                    }}
+                  </h3>
+                  <p>
+                    {{
+                      query() || filter() !== "ALL"
+                        ? "Try a different search or filter."
+                        : "When you make a payment, you’ll find the details here."
+                    }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="result-count">{{ filtered().length }} transactions</p>
+  }
+</main>

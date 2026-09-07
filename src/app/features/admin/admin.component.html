@@ -1,0 +1,240 @@
+<app-navbar />
+<main id="main" class="workspace">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">THE BIGGER PICTURE</span>
+      <h1>Bank operations<span class="green">.</span></h1>
+      <p>Your customers, accounts and payment journeys, connected.</p>
+    </div>
+    <button
+      class="button secondary"
+      (click)="dashboard.reload()"
+      [disabled]="dashboard.isLoading()"
+    >
+      Refresh ↻
+    </button>
+  </header>
+  <app-page-state
+    [loading]="dashboard.isLoading()"
+    [error]="dashboard.error()"
+    (retry)="dashboard.reload()"
+  />
+  @if (!dashboard.error() && dashboard.value(); as data) {
+    <div class="stats-grid">
+      @for (stat of stats(); track stat.label) {
+        <article class="panel stat">
+          <span>{{ stat.label }}</span
+          ><strong>{{ stat.value }}</strong>
+        </article>
+      }
+    </div>
+    <div class="tabs" aria-label="Operations views">
+      @for (t of tabs; track t) {
+        <button
+          [class.selected]="tab() === t"
+          [attr.aria-pressed]="tab() === t"
+          (click)="tab.set(t)"
+        >
+          {{ t }}
+        </button>
+      }
+    </div>
+    <div class="panel table-scroll">
+      @switch (tab()) {
+        @case ("Accounts") {
+          <table>
+            <caption class="sr-only">
+              Accounts
+            </caption>
+            <thead>
+              <tr>
+                <th>Account</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th class="text-right">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (a of data.accounts; track a.id) {
+                <tr>
+                  <td class="mono">{{ a.accountNumber }}</td>
+                  <td>{{ a.userName }}</td>
+                  <td>{{ a.accountType }}</td>
+                  <td>
+                    <span class="badge">{{ a.status }}</span>
+                  </td>
+                  <td class="text-right money">{{ a.balance | currency }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="empty-state">No accounts yet.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @case ("Payments") {
+          <table>
+            <caption class="sr-only">
+              Payments
+            </caption>
+            <thead>
+              <tr>
+                <th>Payment</th>
+                <th>From → To</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of data.payments; track p.id) {
+                <tr>
+                  <td>{{ p.description }}</td>
+                  <td>
+                    {{ p.sourceAccountNumber }} →
+                    {{ p.destinationAccountNumber }}
+                  </td>
+                  <td>{{ p.createdBy }}</td>
+                  <td>
+                    <span
+                      class="badge"
+                      [class.failed]="p.status === 'FAILED'"
+                      >{{ p.status }}</span
+                    >
+                  </td>
+                  <td class="text-right money">{{ p.amount | currency }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="empty-state">No payments yet.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @case ("Transactions") {
+          <table>
+            <caption class="sr-only">
+              Transactions
+            </caption>
+            <thead>
+              <tr>
+                <th>Account</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of data.transactions; track t.id) {
+                <tr>
+                  <td>{{ t.accountNumber }}</td>
+                  <td>{{ t.description }}</td>
+                  <td>{{ t.type }}</td>
+                  <td>{{ t.timestamp | date: "mediumDate" }}</td>
+                  <td class="text-right money">{{ t.amount | currency }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="empty-state">No transactions yet.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @case ("Sagas") {
+          <table>
+            <caption class="sr-only">
+              Sagas
+            </caption>
+            <thead>
+              <tr>
+                <th>Journey</th>
+                <th>Status</th>
+                <th>Step</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of (data.sagaInstances ?? []); track s.id) {
+                <tr>
+                  <td>
+                    <strong>{{ s.sagaName }}</strong
+                    ><small>#{{ s.id }}</small>
+                  </td>
+                  <td>
+                    <span
+                      class="badge"
+                      [class.failed]="s.status === 'FAILED'"
+                      >{{ s.status }}</span
+                    >
+                  </td>
+                  <td>{{ s.currentStep }}</td>
+                  <td>{{ s.updatedAt | date: "medium" }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="empty-state">No sagas yet.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @case ('Audit trail') {
+          <table><caption class="sr-only">Choreography audit trail</caption>
+            <thead><tr><th>Event</th><th>Service</th><th>Customer</th><th>Details</th><th>Date</th></tr></thead>
+            <tbody>@for(event of (data.auditLogs ?? []); track event.id) {
+              <tr><td><span class="badge">{{event.eventType}}</span></td><td>{{event.serviceName}}</td><td>{{event.username}}</td>
+                <td class="audit-details">{{event.details}}<small>{{event.correlationId}}</small></td><td>{{event.timestamp | date:'medium'}}</td></tr>
+            } @empty {<tr><td colspan="5" class="empty-state">No audit events yet.</td></tr>}</tbody>
+          </table>
+        }
+        @case ("Customers") {
+          <table>
+            <caption class="sr-only">
+              Customers
+            </caption>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Roles</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (u of data.users; track u.userId) {
+                <tr>
+                  <td>{{ u.fullName }}</td>
+                  <td>{{ u.username }}</td>
+                  <td>{{ u.email }}</td>
+                  <td>{{ u.roles?.join(', ') || '—' }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="empty-state">No customers yet.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @case ("Notifications") {
+          @for (n of data.notifications; track n.id) {
+            <article class="notification">
+              <strong>{{ n.subject || n.type }}</strong>
+              <p>{{ n.message }}</p>
+              <small
+                >{{ n.userName }} · {{ n.timestamp | date: "medium" }}</small
+              >
+            </article>
+          } @empty {
+            <div class="empty-state">No notifications yet.</div>
+          }
+        }
+      }
+    </div>
+  }
+</main>
